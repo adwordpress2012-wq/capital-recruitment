@@ -12,10 +12,19 @@ export function SiteFooter() {
             Connecting people. Powering success. Trusted labour hire and workforce solutions across Australia.
           </p>
           <div className="mt-5 flex gap-3">
-            {[Linkedin, Facebook, Instagram].map((Icon, i) => (
-              <a key={i} href="#" className="rounded-full border border-white/15 p-2 hover:bg-white/10 transition" aria-label="Social link">
+            {[
+              { Icon: Linkedin, label: "LinkedIn" },
+              { Icon: Facebook, label: "Facebook" },
+              { Icon: Instagram, label: "Instagram" },
+            ].map(({ Icon, label }) => (
+              <button
+                key={label}
+                type="button"
+                aria-label={`${label} (coming soon)`}
+                className="rounded-full border border-white/15 p-2 hover:bg-white/10 transition"
+              >
                 <Icon className="size-4" />
-              </a>
+              </button>
             ))}
           </div>
         </div>
