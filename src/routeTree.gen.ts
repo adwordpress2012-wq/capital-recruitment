@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as JobSeekersRouteImport } from './routes/job-seekers'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as EmployersRouteImport } from './routes/employers'
@@ -16,6 +17,11 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const JobsRoute = JobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JobSeekersRoute = JobSeekersRouteImport.update({
   id: '/job-seekers',
   path: '/job-seekers',
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/employers': typeof EmployersRoute
   '/industries': typeof IndustriesRoute
   '/job-seekers': typeof JobSeekersRoute
+  '/jobs': typeof JobsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/employers': typeof EmployersRoute
   '/industries': typeof IndustriesRoute
   '/job-seekers': typeof JobSeekersRoute
+  '/jobs': typeof JobsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/employers': typeof EmployersRoute
   '/industries': typeof IndustriesRoute
   '/job-seekers': typeof JobSeekersRoute
+  '/jobs': typeof JobsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/employers'
     | '/industries'
     | '/job-seekers'
+    | '/jobs'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/employers'
     | '/industries'
     | '/job-seekers'
+    | '/jobs'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/employers'
     | '/industries'
     | '/job-seekers'
+    | '/jobs'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,10 +118,18 @@ export interface RootRouteChildren {
   EmployersRoute: typeof EmployersRoute
   IndustriesRoute: typeof IndustriesRoute
   JobSeekersRoute: typeof JobSeekersRoute
+  JobsRoute: typeof JobsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/jobs': {
+      id: '/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof JobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/job-seekers': {
       id: '/job-seekers'
       path: '/job-seekers'
@@ -162,7 +182,18 @@ const rootRouteChildren: RootRouteChildren = {
   EmployersRoute: EmployersRoute,
   IndustriesRoute: IndustriesRoute,
   JobSeekersRoute: JobSeekersRoute,
+  JobsRoute: JobsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
