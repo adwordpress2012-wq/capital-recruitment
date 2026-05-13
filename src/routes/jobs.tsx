@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Search, MapPin, Briefcase, ArrowRight, Filter } from "lucide-react";
 import { JOBS } from "@/data/jobs";
@@ -21,6 +21,12 @@ const INDUSTRIES = ["All", ...Array.from(new Set(JOBS.map((j) => j.industry)))];
 const TYPES = ["All", "Full-time", "Casual", "Contract", "Temporary"];
 
 function JobsPage() {
+  const matches = useMatches();
+  const isJobDetail = matches.some((m) => m.routeId === "/jobs/$jobId");
+  if (isJobDetail) {
+    return <Outlet />;
+  }
+
   const [q, setQ] = useState("");
   const [industry, setIndustry] = useState("All");
   const [type, setType] = useState("All");
