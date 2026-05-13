@@ -58,13 +58,13 @@ function JobPage() {
           <div className="card-soft">
             <h2 className="text-xl font-bold">About the role</h2>
             <ul className="mt-4 space-y-3">
-              {job.description.map((d) => (
+              {job.description.map((d: string) => (
                 <li key={d} className="flex gap-3 text-sm"><CheckCircle2 className="size-5 text-[color:var(--lime-soft)] shrink-0" /> {d}</li>
               ))}
             </ul>
             <h2 className="mt-8 text-xl font-bold">What you'll bring</h2>
             <ul className="mt-4 space-y-3">
-              {job.requirements.map((d) => (
+              {job.requirements.map((d: string) => (
                 <li key={d} className="flex gap-3 text-sm"><CheckCircle2 className="size-5 text-[color:var(--lime-soft)] shrink-0" /> {d}</li>
               ))}
             </ul>
