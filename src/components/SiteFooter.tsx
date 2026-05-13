@@ -24,7 +24,8 @@ export function SiteFooter() {
           <ul className="space-y-2 text-sm">
             {[
               ["/", "Home"], ["/about", "About Us"], ["/employers", "Employers"],
-              ["/job-seekers", "Job Seekers"], ["/industries", "Industries"], ["/contact", "Contact"],
+              ["/job-seekers", "Job Seekers"], ["/jobs", "Browse Jobs"],
+              ["/industries", "Industries"], ["/contact", "Contact"],
             ].map(([to, label]) => (
               <li key={to}><Link to={to} className="hover:text-white transition">{label}</Link></li>
             ))}
@@ -40,9 +41,13 @@ export function SiteFooter() {
         <div>
           <h4 className="text-white text-sm font-semibold mb-4">Get in touch</h4>
           <ul className="space-y-3 text-sm">
-            <li className="flex gap-3"><Phone className="size-4 mt-0.5 text-[color:var(--lime)]" /> 1300 00 30 47</li>
-            <li className="flex gap-3"><Mail className="size-4 mt-0.5 text-[color:var(--lime)]" /> info@capitalrecruitment.com.au</li>
-            <li className="flex gap-3"><MapPin className="size-4 mt-0.5 text-[color:var(--lime)]" /> Level 1, 6 Help St, Chatswood NSW 2067</li>
+            <li className="flex gap-3"><Phone className="size-4 mt-0.5 text-[color:var(--lime)]" /><span>1300 00 30 47</span></li>
+            <li className="flex gap-3"><Mail className="size-4 mt-0.5 text-[color:var(--lime)]" /><span>info@capitalrecruitment.com.au</span></li>
+            <li className="flex gap-3"><MapPin className="size-4 mt-0.5 text-[color:var(--lime)]" /><span>Level 1, 6 Help St, Chatswood NSW 2067</span></li>
+            <li className="pt-2 flex flex-col gap-2">
+              <Link to="/register" className="hover:text-white transition">Candidate registration →</Link>
+              <Link to="/employer-enquiry" className="hover:text-white transition">Employer enquiry →</Link>
+            </li>
           </ul>
         </div>
       </div>
@@ -50,8 +55,8 @@ export function SiteFooter() {
         <div className="container-x py-6 flex flex-col md:flex-row gap-4 items-center justify-between text-xs text-white/55">
           <div>© {new Date().getFullYear()} Capital Recruitment Agency. All rights reserved.</div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-white">Privacy Policy</a>
-            <a href="#" className="hover:text-white">Terms & Conditions</a>
+            <Link to="/privacy" className="hover:text-white">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white">Terms & Conditions</Link>
           </div>
         </div>
       </div>

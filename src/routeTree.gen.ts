@@ -9,13 +9,39 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as JobSeekersRouteImport } from './routes/job-seekers'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as EmployersRouteImport } from './routes/employers'
+import { Route as EmployerEnquiryRouteImport } from './routes/employer-enquiry'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as JobsJobIdRouteImport } from './routes/jobs.$jobId'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsRoute = JobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JobSeekersRoute = JobSeekersRouteImport.update({
   id: '/job-seekers',
   path: '/job-seekers',
@@ -29,6 +55,11 @@ const IndustriesRoute = IndustriesRouteImport.update({
 const EmployersRoute = EmployersRouteImport.update({
   id: '/employers',
   path: '/employers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployerEnquiryRoute = EmployerEnquiryRouteImport.update({
+  id: '/employer-enquiry',
+  path: '/employer-enquiry',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -46,31 +77,54 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JobsJobIdRoute = JobsJobIdRouteImport.update({
+  id: '/$jobId',
+  path: '/$jobId',
+  getParentRoute: () => JobsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/employer-enquiry': typeof EmployerEnquiryRoute
   '/employers': typeof EmployersRoute
   '/industries': typeof IndustriesRoute
   '/job-seekers': typeof JobSeekersRoute
+  '/jobs': typeof JobsRouteWithChildren
+  '/privacy': typeof PrivacyRoute
+  '/register': typeof RegisterRoute
+  '/terms': typeof TermsRoute
+  '/jobs/$jobId': typeof JobsJobIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/employer-enquiry': typeof EmployerEnquiryRoute
   '/employers': typeof EmployersRoute
   '/industries': typeof IndustriesRoute
   '/job-seekers': typeof JobSeekersRoute
+  '/jobs': typeof JobsRouteWithChildren
+  '/privacy': typeof PrivacyRoute
+  '/register': typeof RegisterRoute
+  '/terms': typeof TermsRoute
+  '/jobs/$jobId': typeof JobsJobIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/employer-enquiry': typeof EmployerEnquiryRoute
   '/employers': typeof EmployersRoute
   '/industries': typeof IndustriesRoute
   '/job-seekers': typeof JobSeekersRoute
+  '/jobs': typeof JobsRouteWithChildren
+  '/privacy': typeof PrivacyRoute
+  '/register': typeof RegisterRoute
+  '/terms': typeof TermsRoute
+  '/jobs/$jobId': typeof JobsJobIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -78,38 +132,89 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/employer-enquiry'
     | '/employers'
     | '/industries'
     | '/job-seekers'
+    | '/jobs'
+    | '/privacy'
+    | '/register'
+    | '/terms'
+    | '/jobs/$jobId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/contact'
+    | '/employer-enquiry'
     | '/employers'
     | '/industries'
     | '/job-seekers'
+    | '/jobs'
+    | '/privacy'
+    | '/register'
+    | '/terms'
+    | '/jobs/$jobId'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/contact'
+    | '/employer-enquiry'
     | '/employers'
     | '/industries'
     | '/job-seekers'
+    | '/jobs'
+    | '/privacy'
+    | '/register'
+    | '/terms'
+    | '/jobs/$jobId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
+  EmployerEnquiryRoute: typeof EmployerEnquiryRoute
   EmployersRoute: typeof EmployersRoute
   IndustriesRoute: typeof IndustriesRoute
   JobSeekersRoute: typeof JobSeekersRoute
+  JobsRoute: typeof JobsRouteWithChildren
+  PrivacyRoute: typeof PrivacyRoute
+  RegisterRoute: typeof RegisterRoute
+  TermsRoute: typeof TermsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs': {
+      id: '/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof JobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/job-seekers': {
       id: '/job-seekers'
       path: '/job-seekers'
@@ -129,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/employers'
       fullPath: '/employers'
       preLoaderRoute: typeof EmployersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employer-enquiry': {
+      id: '/employer-enquiry'
+      path: '/employer-enquiry'
+      fullPath: '/employer-enquiry'
+      preLoaderRoute: typeof EmployerEnquiryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -152,16 +264,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/jobs/$jobId': {
+      id: '/jobs/$jobId'
+      path: '/$jobId'
+      fullPath: '/jobs/$jobId'
+      preLoaderRoute: typeof JobsJobIdRouteImport
+      parentRoute: typeof JobsRoute
+    }
   }
 }
+
+interface JobsRouteChildren {
+  JobsJobIdRoute: typeof JobsJobIdRoute
+}
+
+const JobsRouteChildren: JobsRouteChildren = {
+  JobsJobIdRoute: JobsJobIdRoute,
+}
+
+const JobsRouteWithChildren = JobsRoute._addFileChildren(JobsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
+  EmployerEnquiryRoute: EmployerEnquiryRoute,
   EmployersRoute: EmployersRoute,
   IndustriesRoute: IndustriesRoute,
   JobSeekersRoute: JobSeekersRoute,
+  JobsRoute: JobsRouteWithChildren,
+  PrivacyRoute: PrivacyRoute,
+  RegisterRoute: RegisterRoute,
+  TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
