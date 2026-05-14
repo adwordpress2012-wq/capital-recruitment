@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Save, X } from "lucide-react";
 import { INDUSTRY_LABELS } from "@/data/industries";
@@ -50,6 +50,7 @@ function emptyForm(): Omit<Job, "id"> {
 }
 
 function AdminJobsPage() {
+  const router = useRouter();
   const [ready, setReady] = useState(false);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -101,10 +102,10 @@ function AdminJobsPage() {
     if (!editing) return;
     const token = readAdminToken();
     if (!token) return;
-    const nextId = creating ? slugId(editing.title || "job") : editing.id;
+    /** Stable PK: new jobs get one id from startCreate; resaves must not rotate ids (duplicate key). */
     const normalized: Job = {
       ...editing,
-      id: nextId,
+      id: editing.id,
       description: editing.description.map((s) => s.trim()).filter(Boolean),
       requirements: editing.requirements.map((s) => s.trim()).filter(Boolean),
     };
@@ -113,6 +114,7 @@ function AdminJobsPage() {
       await adminSaveJobFn({ data: { adminToken: token, job: normalized } });
       cancelEdit();
       await reload();
+      await router.invalidate();
     } catch (e) {
       setLoadError(e instanceof Error ? e.message : "Could not save job.");
     }
@@ -126,6 +128,7 @@ function AdminJobsPage() {
       await adminDeleteJobFn({ data: { adminToken: token, id } });
       if (editing?.id === id) cancelEdit();
       await reload();
+      await router.invalidate();
     } catch (e) {
       setLoadError(e instanceof Error ? e.message : "Could not delete job.");
     }

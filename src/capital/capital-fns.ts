@@ -173,7 +173,9 @@ export const adminSaveJobFn = createServerFn({ method: "POST" })
     const id = incoming.id?.trim() ? incoming.id.trim() : slugJobIdFromTitle(incoming.title || "job");
     const job: Job = { ...incoming, id } as Job;
     const row = jobToDbRow(job);
-    const { error } = await serviceClient().from("capital_jobs").upsert(row, { onConflict: "id" });
+    const { error } = await serviceClient()
+      .from("capital_jobs")
+      .upsert(row, { onConflict: "id", ignoreDuplicates: false });
     if (error) {
       logCapital("capital_jobs.upsert(admin save)", error);
       throw new Error(`Could not save job: ${formatSupabaseWriteError(error)}`);
