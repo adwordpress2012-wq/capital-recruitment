@@ -27,6 +27,9 @@ export function slugJobIdFromTitle(title: string): string {
   return `${base || "job"}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+export const DEFAULT_POSTED_LABEL = "Recently listed";
+const PLACEHOLDER_DASH = "—";
+
 export type CapitalJobRow = {
   id: string;
   title: string;
@@ -39,6 +42,7 @@ export type CapitalJobRow = {
   description: unknown;
   requirements: unknown;
   status: string;
+  updated_at?: string;
 };
 
 const DB_STATUS = {
@@ -72,21 +76,31 @@ export function jobRowToJob(row: CapitalJobRow): Job {
   };
 }
 
-export function jobToDbRow(job: Job): Omit<CapitalJobRow, "status"> & { status: string } {
+export function jobToDbRow(
+  job: Job,
+): Omit<CapitalJobRow, "status" | "updated_at"> & { status: string; updated_at: string } {
   const status = DB_STATUS[job.status] ?? "draft";
   const description = normalizeJobStringList(job.description);
   const requirements = normalizeJobStringList(job.requirements);
+  const title = (job.title ?? "").trim() || "Untitled role";
+  const industry = (job.industry ?? "").trim() || PLACEHOLDER_DASH;
+  const location = (job.location ?? "").trim() || PLACEHOLDER_DASH;
+  const employment_type = (job.type ?? "").trim() || "Casual";
+  const rate = (job.rate ?? "").trim() || PLACEHOLDER_DASH;
+  const posted_label = (job.posted ?? "").trim() || DEFAULT_POSTED_LABEL;
+  const summary = (job.summary ?? "").trim() || PLACEHOLDER_DASH;
   return {
     id: job.id,
-    title: job.title,
-    industry: job.industry,
-    location: job.location,
-    employment_type: job.type,
-    rate: job.rate,
-    posted_label: job.posted,
-    summary: job.summary,
-    description,
-    requirements,
+    title,
+    industry,
+    location,
+    employment_type,
+    rate,
+    posted_label,
+    summary,
+    description: description.length ? description : [],
+    requirements: requirements.length ? requirements : [],
     status,
+    updated_at: new Date().toISOString(),
   };
 }

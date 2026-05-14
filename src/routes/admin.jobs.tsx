@@ -63,8 +63,12 @@ function AdminJobsPage() {
     try {
       const list = await adminListJobsFn({ data: { adminToken: token } });
       setJobs(list);
-    } catch {
-      setLoadError("Could not load jobs. Check Supabase configuration and your session.");
+    } catch (e) {
+      setLoadError(
+        e instanceof Error
+          ? e.message
+          : "Could not load jobs. Check Supabase configuration and your session.",
+      );
     }
   }, []);
 
@@ -122,8 +126,8 @@ function AdminJobsPage() {
       await adminDeleteJobFn({ data: { adminToken: token, id } });
       if (editing?.id === id) cancelEdit();
       await reload();
-    } catch {
-      setLoadError("Could not delete job.");
+    } catch (e) {
+      setLoadError(e instanceof Error ? e.message : "Could not delete job.");
     }
   };
 

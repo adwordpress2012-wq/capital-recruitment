@@ -76,7 +76,6 @@ function ApplyPage() {
     setPending(true);
     const form = e.currentTarget;
     const fd = new FormData(form);
-    fd.set("jobId", jobId);
     try {
       const res = await submitApplicationFn({ data: fd });
       if (!res.ok) {
@@ -125,13 +124,14 @@ function ApplyPage() {
               </div>
             ) : (
               <form className="card-soft grid gap-5" onSubmit={(e) => void onSubmit(e)}>
-                <input type="hidden" name="jobId" value={jobId} />
+                <input type="hidden" name="job_id" value={jobId} />
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label className="text-xs font-semibold text-muted-foreground">Full name</label>
                     <input
-                      name="applicantName"
+                      name="full_name"
                       required
+                      autoComplete="name"
                       className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
                     />
                   </div>
@@ -141,6 +141,7 @@ function ApplyPage() {
                       name="email"
                       type="email"
                       required
+                      autoComplete="email"
                       className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
                     />
                   </div>
@@ -150,7 +151,17 @@ function ApplyPage() {
                       name="phone"
                       type="tel"
                       required
+                      autoComplete="tel"
                       className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-muted-foreground">Location (optional)</label>
+                    <input
+                      name="location"
+                      autoComplete="address-level2"
+                      className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
+                      placeholder="e.g. Western Sydney, NSW"
                     />
                   </div>
                 </div>

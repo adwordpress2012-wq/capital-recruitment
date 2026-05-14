@@ -24,11 +24,12 @@ create table if not exists public.capital_jobs (
 create table if not exists public.candidate_applications (
   id uuid primary key default gen_random_uuid(),
   job_id text references public.capital_jobs (id) on delete set null,
-  applicant_name text not null,
+  full_name text not null,
   email text not null,
   phone text not null,
-  message text not null,
-  resume_storage_path text not null,
+  location text,
+  message text,
+  resume_path text not null,
   resume_filename text,
   created_at timestamptz not null default now()
 );

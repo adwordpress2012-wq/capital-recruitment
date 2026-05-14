@@ -28,8 +28,8 @@ function AdminApplicationsPage() {
     try {
       const data = await adminListApplicationsFn({ data: { adminToken: token } });
       setRows(data);
-    } catch {
-      setError("Could not load applications.");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not load applications.");
     }
   }, []);
 

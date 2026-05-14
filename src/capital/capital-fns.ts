@@ -17,6 +17,28 @@ import { createAdminSessionToken, verifyAdminSessionToken } from "@/capital/capi
 
 const RESUME_BUCKET = "capital-resumes";
 
+type PostgrestishError = {
+  message?: string;
+  code?: string;
+  details?: string | null;
+  hint?: string | null;
+};
+
+/** Safe server logs only (no tokens or secrets). */
+function logCapital(action: string, err: PostgrestishError) {
+  console.error(`[capital] ${action}`, { code: err.code, message: err.message });
+}
+
+function formGetTrim(form: FormData, keys: string[]): string {
+  for (const key of keys) {
+    const raw = form.get(key);
+    if (raw == null) continue;
+    const s = String(raw).trim();
+    if (s !== "") return s;
+  }
+  return "";
+}
+
 function anonClient() {
   const env = readCapitalServerEnv();
   return createClient(env.supabaseUrl, env.supabaseAnonKey, {
@@ -44,7 +66,7 @@ export const listLiveJobsFn = createServerFn({ method: "GET" }).handler(async ()
     .eq("status", "live")
     .order("created_at", { ascending: false });
   if (error) {
-    console.error(error);
+    logCapital("capital_jobs.select(public live list)", error);
     return [];
   }
   return (data as CapitalJobRow[]).map(jobRowToJob);
@@ -65,7 +87,7 @@ export const getLiveJobByIdFn = createServerFn({ method: "GET" })
       .eq("status", "live")
       .maybeSingle();
     if (error) {
-      console.error(error);
+      logCapital("capital_jobs.select(public live by id)", error);
       return null;
     }
     if (!data) return null;
@@ -79,7 +101,9 @@ const adminTokenSchema = z.object({
 function requireAdminToken(token: string) {
   const env = readCapitalServerEnv();
   if (!isAdminAuthConfigured(env)) throw new Error("Admin authentication is not configured.");
-  if (!verifyAdminSessionToken(token, env.adminSessionSecret)) throw new Error("Unauthorized");
+  if (!verifyAdminSessionToken(token, env.adminSessionSecret)) {
+    throw new Error("Admin session expired. Please login again.");
+  }
 }
 
 export const adminLoginFn = createServerFn({ method: "POST" })
@@ -108,8 +132,8 @@ export const adminListJobsFn = createServerFn({ method: "POST" })
       .select("*")
       .order("created_at", { ascending: false });
     if (error) {
-      console.error(error);
-      throw new Error("Could not load jobs.");
+      logCapital("capital_jobs.select(admin list)", error);
+      throw new Error(`Could not load jobs: ${formatSupabaseWriteError(error)}`);
     }
     return (rows as CapitalJobRow[]).map(jobRowToJob);
   });
@@ -151,7 +175,7 @@ export const adminSaveJobFn = createServerFn({ method: "POST" })
     const row = jobToDbRow(job);
     const { error } = await serviceClient().from("capital_jobs").upsert(row, { onConflict: "id" });
     if (error) {
-      console.error(error);
+      logCapital("capital_jobs.upsert(admin save)", error);
       throw new Error(`Could not save job: ${formatSupabaseWriteError(error)}`);
     }
     return { ok: true as const };
@@ -167,8 +191,8 @@ export const adminDeleteJobFn = createServerFn({ method: "POST" })
     if (!isSupabaseBackendConfigured(env)) throw new Error("Supabase is not configured.");
     const { error } = await serviceClient().from("capital_jobs").delete().eq("id", data.id);
     if (error) {
-      console.error(error);
-      throw new Error("Could not delete job.");
+      logCapital("capital_jobs.delete(admin)", error);
+      throw new Error(`Could not delete job: ${formatSupabaseWriteError(error)}`);
     }
     return { ok: true as const };
   });
@@ -194,40 +218,33 @@ export const adminListApplicationsFn = createServerFn({ method: "POST" })
       ascending: false,
     });
     if (error) {
-      console.error(error);
-      throw new Error("Could not load applications.");
+      logCapital("candidate_applications.select(admin list)", error);
+      throw new Error(`Could not load applications: ${formatSupabaseWriteError(error)}`);
     }
-    const list = rows ?? [];
-    const jobIds = [...new Set(list.map((r: { job_id: string | null }) => r.job_id).filter(Boolean))] as string[];
+    const list = (rows ?? []) as Record<string, unknown>[];
+    const jobIds = [...new Set(list.map((r) => r.job_id).filter(Boolean))] as string[];
     let titleById: Record<string, string> = {};
     if (jobIds.length > 0) {
       const { data: jrows } = await sb.from("capital_jobs").select("id,title").in("id", jobIds);
       titleById = Object.fromEntries((jrows ?? []).map((j: { id: string; title: string }) => [j.id, j.title]));
     }
     const out: AdminApplicationRow[] = [];
-    for (const r of list as Array<{
-      id: string;
-      applicant_name: string;
-      phone: string;
-      email: string;
-      resume_storage_path: string;
-      resume_filename: string | null;
-      created_at: string;
-      job_id: string | null;
-    }>) {
+    for (const r of list) {
+      const applicantName = String(r.full_name ?? r.applicant_name ?? "");
+      const resumeKey = String(r.resume_path ?? r.resume_storage_path ?? "");
       let resumeSigned: string | null = null;
-      if (r.resume_storage_path) {
-        const signed = await sb.storage.from(RESUME_BUCKET).createSignedUrl(r.resume_storage_path, 3600);
+      if (resumeKey) {
+        const signed = await sb.storage.from(RESUME_BUCKET).createSignedUrl(resumeKey, 3600);
         resumeSigned = signed.data?.signedUrl ?? null;
       }
       out.push({
-        id: r.id,
-        applicant_name: r.applicant_name,
-        job_title: r.job_id ? titleById[r.job_id] ?? r.job_id : null,
-        phone: r.phone,
-        email: r.email,
+        id: String(r.id),
+        applicant_name: applicantName,
+        job_title: r.job_id ? titleById[String(r.job_id)] ?? String(r.job_id) : null,
+        phone: String(r.phone ?? ""),
+        email: String(r.email ?? ""),
         resume_signed_url: resumeSigned,
-        created_at: r.created_at,
+        created_at: String(r.created_at ?? ""),
       });
     }
     return out;
@@ -243,14 +260,15 @@ export const submitApplicationFn = createServerFn({ method: "POST" })
     if (!isSupabaseBackendConfigured(env)) {
       return { ok: false as const, error: "Applications are not available (database not configured)." };
     }
-    const jobId = String(form.get("jobId") ?? "").trim();
-    const applicantName = String(form.get("applicantName") ?? "").trim();
-    const email = String(form.get("email") ?? "").trim();
-    const phone = String(form.get("phone") ?? "").trim();
-    const message = String(form.get("message") ?? "").trim();
+    const jobId = formGetTrim(form, ["job_id", "jobId"]);
+    const fullName = formGetTrim(form, ["full_name", "applicantName"]);
+    const email = formGetTrim(form, ["email"]);
+    const phone = formGetTrim(form, ["phone"]);
+    const location = formGetTrim(form, ["location"]);
+    const messageTrimmed = String(form.get("message") ?? "").trim();
     const file = form.get("resume");
 
-    if (!jobId || !applicantName || !email || !phone || !message) {
+    if (!jobId || !fullName || !email || !phone || !messageTrimmed) {
       return { ok: false as const, error: "Please fill in all required fields." };
     }
     if (!(file instanceof File) || file.size === 0) {
@@ -270,7 +288,14 @@ export const submitApplicationFn = createServerFn({ method: "POST" })
       .eq("id", jobId)
       .eq("status", "live")
       .maybeSingle();
-    if (jobErr || !job) {
+    if (jobErr) {
+      logCapital("capital_jobs.select(apply verify live)", jobErr);
+      return {
+        ok: false as const,
+        error: `Could not verify job: ${formatSupabaseWriteError(jobErr)}`,
+      };
+    }
+    if (!job) {
       return { ok: false as const, error: "This job is not open for applications." };
     }
 
@@ -283,23 +308,31 @@ export const submitApplicationFn = createServerFn({ method: "POST" })
       upsert: false,
     });
     if (upErr) {
-      console.error(upErr);
-      return { ok: false as const, error: "Could not upload resume. Please try again." };
+      logCapital("storage.capital-resumes.upload(apply)", upErr as PostgrestishError);
+      return {
+        ok: false as const,
+        error: `Could not upload resume: ${formatSupabaseWriteError(upErr as PostgrestishError)}`,
+      };
     }
 
-    const { error: insErr } = await sb.from("candidate_applications").insert({
+    const insertRow = {
       job_id: jobId,
-      applicant_name: applicantName,
+      full_name: fullName,
       email,
       phone,
-      message,
-      resume_storage_path: objectPath,
+      location: location || null,
+      message: messageTrimmed,
+      resume_path: objectPath,
       resume_filename: file.name,
-    });
+    };
+    const { error: insErr } = await sb.from("candidate_applications").insert(insertRow);
     if (insErr) {
-      console.error(insErr);
+      logCapital("candidate_applications.insert(apply)", insErr);
       await sb.storage.from(RESUME_BUCKET).remove([objectPath]);
-      return { ok: false as const, error: "Could not save your application. Please try again." };
+      return {
+        ok: false as const,
+        error: `Could not save your application: ${formatSupabaseWriteError(insErr)}`,
+      };
     }
 
     return { ok: true as const };
