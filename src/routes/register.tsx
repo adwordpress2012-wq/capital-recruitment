@@ -4,7 +4,7 @@ import { Upload, ArrowRight, CheckCircle2, FileText } from "lucide-react";
 import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
 import { INDUSTRY_LABELS } from "@/data/industries";
-import { FORMSPREE_CANDIDATE_ACTION } from "@/lib/forms";
+import { FORMSPREE_CANDIDATE_ACTION, FORMSPREE_CANDIDATE_FILE_UPLOAD_ENABLED } from "@/lib/forms";
 import { EMAIL_APPLICATIONS } from "@/lib/site";
 
 export const Route = createFileRoute("/register")({
@@ -43,6 +43,7 @@ function RegisterPage() {
 
   const action = FORMSPREE_CANDIDATE_ACTION;
   const useFormspree = Boolean(action);
+  const resumeUploadViaFormspree = FORMSPREE_CANDIDATE_FILE_UPLOAD_ENABLED;
 
   const defaultRole = useMemo(() => roleFromUrl || "", [roleFromUrl]);
 
@@ -80,7 +81,7 @@ function RegisterPage() {
                 className="card-soft grid gap-5"
                 action={action}
                 method="POST"
-                encType="multipart/form-data"
+                encType={resumeUploadViaFormspree ? "multipart/form-data" : undefined}
               >
                 <input
                   type="hidden"
@@ -201,14 +202,21 @@ function RegisterPage() {
                 </div>
 
                 <div>
+                  {!resumeUploadViaFormspree && (
+                    <p className="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-sm text-amber-950">
+                      Resume upload will be enabled shortly. For now, please email your resume to
+                      paul@capitalrecruitment.com.au.
+                    </p>
+                  )}
                   <label className="text-xs font-semibold text-muted-foreground">
                     Resume (PDF or Word)
                   </label>
                   <input
                     type="file"
-                    name="attachment"
+                    {...(resumeUploadViaFormspree
+                      ? { name: "attachment", required: true }
+                      : { required: false })}
                     accept=".pdf,.doc,.docx"
-                    required
                     className="mt-2 block w-full text-sm"
                   />
                 </div>
