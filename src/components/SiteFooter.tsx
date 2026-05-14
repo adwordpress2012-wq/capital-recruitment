@@ -108,7 +108,7 @@ export function SiteFooter() {
               </li>
             ) : null}
             <li className="flex flex-col gap-2 pt-2">
-              <Link to="/register" className="font-medium text-white transition hover:underline">
+              <Link to="/register" search={{ role: "" }} className="font-medium text-white transition hover:underline">
                 Candidate application →
               </Link>
               <Link

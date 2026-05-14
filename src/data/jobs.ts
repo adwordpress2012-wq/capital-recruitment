@@ -2,7 +2,7 @@ import type { IndustryLabel } from "@/data/industries";
 
 export type EmploymentType = "Full-time" | "Casual" | "Contract" | "Temporary";
 
-export type JobStatus = "Draft" | "Published" | "Closed";
+export type JobStatus = "Draft" | "Live" | "Closed";
 
 /** Job listing — shape kept JSON-friendly for a future Supabase `jobs` table. */
 export type Job = {
@@ -43,7 +43,7 @@ export const SEED_JOBS: Job[] = [
       "LF licence highly regarded",
       "Reliable, safety-focused and team oriented",
     ],
-    status: "Published",
+    status: "Live",
   },
   {
     id: "forklift-operator-liverpool",
@@ -65,7 +65,7 @@ export const SEED_JOBS: Job[] = [
       "Recent high-reach or counterbalance experience",
       "Safety-first attitude and clear communication",
     ],
-    status: "Published",
+    status: "Live",
   },
   {
     id: "construction-labourer-greater-sydney",
@@ -87,7 +87,7 @@ export const SEED_JOBS: Job[] = [
       "Recent construction labouring experience",
       "Own basic PPE and reliable transport",
     ],
-    status: "Published",
+    status: "Live",
   },
   {
     id: "process-worker-smithfield",
@@ -109,7 +109,7 @@ export const SEED_JOBS: Job[] = [
       "Physically fit for repetitive tasks",
       "Available for rotating day/afternoon shifts",
     ],
-    status: "Published",
+    status: "Live",
   },
   {
     id: "hr-truck-driver-western-sydney",
@@ -127,7 +127,7 @@ export const SEED_JOBS: Job[] = [
       "Complete pre-starts, defect reporting and logbook compliance.",
     ],
     requirements: ["Current HR licence", "Clean driving record", "Multi-drop experience preferred"],
-    status: "Published",
+    status: "Live",
   },
   {
     id: "security-officer-liverpool",
@@ -149,7 +149,7 @@ export const SEED_JOBS: Job[] = [
       "First Aid certificate highly regarded",
       "Clear communication and reliability",
     ],
-    status: "Published",
+    status: "Live",
   },
   {
     id: "administration-assistant-parramatta",
@@ -171,7 +171,7 @@ export const SEED_JOBS: Job[] = [
       "Experience in logistics, construction or industrial admin highly regarded",
       "Available for a 3–6 month assignment with potential extension",
     ],
-    status: "Published",
+    status: "Live",
   },
 ];
 

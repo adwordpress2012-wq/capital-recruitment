@@ -30,8 +30,8 @@ export function resetJobsToSeed(): void {
   window.localStorage.removeItem(STORAGE_KEY);
 }
 
-export function getPublishedJobs(jobs: Job[]): Job[] {
-  return jobs.filter((j) => j.status === "Published");
+export function getLiveJobsForPublic(jobs: Job[]): Job[] {
+  return jobs.filter((j) => j.status === "Live");
 }
 
 export function getJobById(jobs: Job[], id: string): Job | undefined {

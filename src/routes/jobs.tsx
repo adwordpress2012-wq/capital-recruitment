@@ -1,13 +1,13 @@
 import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Search, MapPin, Briefcase, ArrowRight, Filter } from "lucide-react";
 import type { Job } from "@/data/jobs";
-import { getPublishedJobs, readJobs } from "@/lib/jobs-repo";
-import { SEED_JOBS } from "@/data/jobs";
 import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
+import { listLiveJobsFn } from "@/capital/capital-fns";
 
 export const Route = createFileRoute("/jobs")({
+  loader: async () => ({ initialJobs: await listLiveJobsFn() }),
   head: () => ({
     meta: [
       {
@@ -36,14 +36,11 @@ export const Route = createFileRoute("/jobs")({
 const TYPES = ["All", "Full-time", "Casual", "Contract", "Temporary"] as const;
 
 function JobsPage() {
+  const { initialJobs } = Route.useLoaderData();
   const matches = useMatches();
   const isJobDetail = matches.some((m) => m.routeId === "/jobs/$jobId");
 
-  const [jobs, setJobs] = useState<Job[]>(() => getPublishedJobs(SEED_JOBS));
-
-  useEffect(() => {
-    setJobs(getPublishedJobs(readJobs()));
-  }, []);
+  const jobs = initialJobs;
 
   const [q, setQ] = useState("");
   const [industry, setIndustry] = useState("All");

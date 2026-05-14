@@ -1,17 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, MapPin, Briefcase, Clock, DollarSign, CheckCircle2, Send } from "lucide-react";
-import { jobsById } from "@/data/jobs";
-import { getJobById, readJobs } from "@/lib/jobs-repo";
 import { Reveal } from "@/components/Reveal";
+import { getLiveJobByIdFn } from "@/capital/capital-fns";
 
 export const Route = createFileRoute("/jobs/$jobId")({
-  loader: ({ params }) => {
-    const seedJob = jobsById[params.jobId] ?? null;
-    return { jobId: params.jobId, seedJob };
+  loader: async ({ params }) => {
+    const job = await getLiveJobByIdFn({ data: params.jobId });
+    return { jobId: params.jobId, job };
   },
   head: ({ loaderData }) => {
-    const j = loaderData?.seedJob;
+    const j = loaderData?.job;
     return {
       meta: j
         ? [
@@ -37,20 +35,9 @@ export const Route = createFileRoute("/jobs/$jobId")({
 });
 
 function JobPage() {
-  const { jobId, seedJob } = Route.useLoaderData();
-  const [hydrated, setHydrated] = useState(false);
+  const { jobId, job } = Route.useLoaderData();
 
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  const job = useMemo(() => {
-    if (seedJob) return seedJob;
-    if (!hydrated) return null;
-    return getJobById(readJobs(), jobId) ?? null;
-  }, [seedJob, hydrated, jobId]);
-
-  if (hydrated && !job) {
+  if (!job) {
     return (
       <div className="container-x py-24 text-center">
         <h1 className="text-3xl font-bold">Role not found</h1>
@@ -62,15 +49,7 @@ function JobPage() {
     );
   }
 
-  if (!job) {
-    return (
-      <div className="container-x py-24 text-center text-muted-foreground">
-        <p>Loading role…</p>
-      </div>
-    );
-  }
-
-  if (job.status !== "Published") {
+  if (job.status !== "Live") {
     return (
       <div className="container-x py-24 text-center">
         <h1 className="text-3xl font-bold">This listing is not available</h1>
@@ -147,8 +126,8 @@ function JobPage() {
               Submit your details and resume — our team reviews every application carefully.
             </p>
             <Link
-              to="/register"
-              search={{ role: job.title }}
+              to="/apply"
+              search={{ jobId: job.id }}
               className="btn-primary mt-5 flex w-full justify-center"
             >
               <Send className="size-4" /> Apply for this role

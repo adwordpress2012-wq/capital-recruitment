@@ -25,7 +25,9 @@ import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JobsJobIdRouteImport } from './routes/jobs.$jobId'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminJobsRouteImport } from './routes/admin.jobs'
+import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
 
 const WhsCommitmentRoute = WhsCommitmentRouteImport.update({
   id: '/whs-commitment',
@@ -107,9 +109,19 @@ const JobsJobIdRoute = JobsJobIdRouteImport.update({
   path: '/$jobId',
   getParentRoute: () => JobsRoute,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminJobsRoute = AdminJobsRouteImport.update({
   id: '/admin/jobs',
   path: '/admin/jobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
+  id: '/admin/applications',
+  path: '/admin/applications',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -129,7 +141,9 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/terms': typeof TermsRoute
   '/whs-commitment': typeof WhsCommitmentRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/jobs': typeof AdminJobsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/jobs/$jobId': typeof JobsJobIdRoute
 }
 export interface FileRoutesByTo {
@@ -148,7 +162,9 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/terms': typeof TermsRoute
   '/whs-commitment': typeof WhsCommitmentRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/jobs': typeof AdminJobsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/jobs/$jobId': typeof JobsJobIdRoute
 }
 export interface FileRoutesById {
@@ -168,7 +184,9 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/terms': typeof TermsRoute
   '/whs-commitment': typeof WhsCommitmentRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/jobs': typeof AdminJobsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/jobs/$jobId': typeof JobsJobIdRoute
 }
 export interface FileRouteTypes {
@@ -189,7 +207,9 @@ export interface FileRouteTypes {
     | '/register'
     | '/terms'
     | '/whs-commitment'
+    | '/admin/applications'
     | '/admin/jobs'
+    | '/admin/login'
     | '/jobs/$jobId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -208,7 +228,9 @@ export interface FileRouteTypes {
     | '/register'
     | '/terms'
     | '/whs-commitment'
+    | '/admin/applications'
     | '/admin/jobs'
+    | '/admin/login'
     | '/jobs/$jobId'
   id:
     | '__root__'
@@ -227,7 +249,9 @@ export interface FileRouteTypes {
     | '/register'
     | '/terms'
     | '/whs-commitment'
+    | '/admin/applications'
     | '/admin/jobs'
+    | '/admin/login'
     | '/jobs/$jobId'
   fileRoutesById: FileRoutesById
 }
@@ -247,7 +271,9 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   TermsRoute: typeof TermsRoute
   WhsCommitmentRoute: typeof WhsCommitmentRoute
+  AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminJobsRoute: typeof AdminJobsRoute
+  AdminLoginRoute: typeof AdminLoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -364,11 +390,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JobsJobIdRouteImport
       parentRoute: typeof JobsRoute
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/jobs': {
       id: '/admin/jobs'
       path: '/admin/jobs'
       fullPath: '/admin/jobs'
       preLoaderRoute: typeof AdminJobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/applications': {
+      id: '/admin/applications'
+      path: '/admin/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AdminApplicationsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -400,7 +440,9 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   TermsRoute: TermsRoute,
   WhsCommitmentRoute: WhsCommitmentRoute,
+  AdminApplicationsRoute: AdminApplicationsRoute,
   AdminJobsRoute: AdminJobsRoute,
+  AdminLoginRoute: AdminLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

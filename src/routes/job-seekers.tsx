@@ -94,7 +94,7 @@ function JobSeekersPage() {
               <Link to="/jobs" className="btn-primary">
                 <Search className="size-4" /> Browse jobs
               </Link>
-              <Link to="/register" className="btn-outline">
+              <Link to="/register" search={{ role: "" }} className="btn-outline">
                 <Upload className="size-4" /> Apply online
               </Link>
             </div>
@@ -141,7 +141,7 @@ function JobSeekersPage() {
             </p>
           </div>
           <div className="flex flex-col justify-center gap-3">
-            <Link to="/register" className="btn-primary w-full justify-center">
+            <Link to="/register" search={{ role: "" }} className="btn-primary w-full justify-center">
               Start application <ArrowRight className="size-4" />
             </Link>
             <Link

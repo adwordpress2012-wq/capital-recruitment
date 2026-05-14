@@ -1,11 +1,12 @@
 import type { ReactNode } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useMemo, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useCallback, useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Save, X } from "lucide-react";
 import { INDUSTRY_LABELS } from "@/data/industries";
 import type { EmploymentType, Job, JobStatus } from "@/data/jobs";
-import { readJobs, writeJobs } from "@/lib/jobs-repo";
+import { clearAdminToken, readAdminToken } from "@/lib/admin-token";
 import { Section } from "@/components/Section";
+import { adminDeleteJobFn, adminListJobsFn, adminSaveJobFn } from "@/capital/capital-fns";
 
 export const Route = createFileRoute("/admin/jobs")({
   head: () => ({
@@ -14,8 +15,7 @@ export const Route = createFileRoute("/admin/jobs")({
       { name: "robots", content: "noindex, nofollow" },
       {
         name: "description",
-        content:
-          "Internal job listing management. Data is stored in this browser until a database is connected.",
+        content: "Internal job listing management for Capital Recruitment.",
       },
     ],
   }),
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/admin/jobs")({
 });
 
 const EMPLOYMENT: EmploymentType[] = ["Full-time", "Casual", "Contract", "Temporary"];
-const STATUSES: JobStatus[] = ["Draft", "Published", "Closed"];
+const STATUSES: JobStatus[] = ["Draft", "Live", "Closed"];
 
 function slugId(title: string): string {
   const base = title
@@ -50,14 +50,33 @@ function emptyForm(): Omit<Job, "id"> {
 }
 
 function AdminJobsPage() {
-  const [jobs, setJobs] = useState<Job[]>(() => readJobs());
+  const [ready, setReady] = useState(false);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [editing, setEditing] = useState<Job | null>(null);
   const [creating, setCreating] = useState(false);
 
-  const persist = useCallback((next: Job[]) => {
-    setJobs(next);
-    writeJobs(next);
+  const reload = useCallback(async () => {
+    const token = readAdminToken();
+    if (!token) return;
+    setLoadError(null);
+    try {
+      const list = await adminListJobsFn({ data: { adminToken: token } });
+      setJobs(list);
+    } catch {
+      setLoadError("Could not load jobs. Check Supabase configuration and your session.");
+    }
   }, []);
+
+  useEffect(() => {
+    const token = readAdminToken();
+    if (!token) {
+      window.location.assign("/admin/login");
+      return;
+    }
+    setReady(true);
+    void reload();
+  }, [reload]);
 
   const startCreate = () => {
     setCreating(true);
@@ -74,8 +93,10 @@ function AdminJobsPage() {
     setCreating(false);
   };
 
-  const saveJob = () => {
+  const saveJob = async () => {
     if (!editing) return;
+    const token = readAdminToken();
+    if (!token) return;
     const nextId = creating ? slugId(editing.title || "job") : editing.id;
     const normalized: Job = {
       ...editing,
@@ -84,26 +105,37 @@ function AdminJobsPage() {
       requirements: editing.requirements.map((s) => s.trim()).filter(Boolean),
     };
     if (!normalized.title.trim()) return;
-
-    let next: Job[];
-    if (creating) {
-      next = [...jobs, normalized];
-    } else {
-      next = jobs.map((j) => (j.id === editing.id ? normalized : j));
+    try {
+      await adminSaveJobFn({ data: { adminToken: token, job: normalized } });
+      cancelEdit();
+      await reload();
+    } catch {
+      setLoadError("Could not save job.");
     }
-    persist(next);
-    cancelEdit();
   };
 
-  const deleteJob = (id: string) => {
-    if (!window.confirm("Delete this job? This cannot be undone from the admin screen.")) return;
-    persist(jobs.filter((j) => j.id !== id));
-    if (editing?.id === id) cancelEdit();
+  const deleteJob = async (id: string) => {
+    if (!window.confirm("Delete this job? This cannot be undone.")) return;
+    const token = readAdminToken();
+    if (!token) return;
+    try {
+      await adminDeleteJobFn({ data: { adminToken: token, id } });
+      if (editing?.id === id) cancelEdit();
+      await reload();
+    } catch {
+      setLoadError("Could not delete job.");
+    }
   };
 
   const form = editing;
 
-  const industryOptions = useMemo(() => [...INDUSTRY_LABELS], []);
+  if (!ready) {
+    return (
+      <div className="container-x py-16 text-sm text-muted-foreground">
+        Checking session…
+      </div>
+    );
+  }
 
   return (
     <>
@@ -111,19 +143,34 @@ function AdminJobsPage() {
         <div className="eyebrow mb-3">● Admin</div>
         <h1 className="text-3xl md:text-5xl font-bold leading-tight">Job listings</h1>
         <p className="mt-3 max-w-3xl text-muted-foreground text-sm md:text-base">
-          Simple in-browser management for now. Jobs are saved to{" "}
-          <code className="rounded bg-muted px-1 py-0.5 text-xs">localStorage</code> on this device.
-          Replace with Supabase (or similar) by swapping the read/write layer in{" "}
-          <code className="rounded bg-muted px-1 py-0.5 text-xs">src/lib/jobs-repo.ts</code> — keep
-          the <code className="rounded bg-muted px-1 py-0.5 text-xs">Job</code> type as your table
-          guide.
+          Jobs are stored in Supabase (<code className="rounded bg-muted px-1 py-0.5 text-xs">capital_jobs</code>
+          ). Only jobs marked <strong>Live</strong> appear on the public jobs page.
         </p>
-        <button type="button" className="btn-primary mt-6" onClick={startCreate}>
-          <Plus className="size-4" /> Add job
-        </button>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <button type="button" className="btn-primary" onClick={startCreate}>
+            <Plus className="size-4" /> Add job
+          </button>
+          <Link to="/admin/applications" className="btn-outline px-4 py-2 text-sm">
+            Applications
+          </Link>
+          <button
+            type="button"
+            className="btn-outline px-4 py-2 text-sm"
+            onClick={() => {
+              clearAdminToken();
+              window.location.assign("/admin/login");
+            }}
+          >
+            Sign out
+          </button>
+          <Link to="/" className="btn-outline px-4 py-2 text-sm">
+            Website home
+          </Link>
+        </div>
       </section>
 
       <Section className="!py-8">
+        {loadError && <p className="mb-4 text-sm text-red-600">{loadError}</p>}
         <div className="overflow-x-auto rounded-2xl border bg-card">
           <table className="w-full min-w-[640px] text-sm">
             <thead className="bg-muted/50 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -178,11 +225,7 @@ function AdminJobsPage() {
           <div className="card-soft grid gap-4 max-w-3xl">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-xl font-bold">{creating ? "New job" : "Edit job"}</h2>
-              <button
-                type="button"
-                className="btn-outline px-3 py-1.5 text-xs"
-                onClick={cancelEdit}
-              >
+              <button type="button" className="btn-outline px-3 py-1.5 text-xs" onClick={cancelEdit}>
                 <X className="size-3.5" /> Close
               </button>
             </div>
@@ -201,7 +244,7 @@ function AdminJobsPage() {
                   value={form.industry}
                   onChange={(e) => setEditing({ ...form, industry: e.target.value })}
                 >
-                  {industryOptions.map((i) => (
+                  {INDUSTRY_LABELS.map((i) => (
                     <option key={i} value={i}>
                       {i}
                     </option>
@@ -286,7 +329,7 @@ function AdminJobsPage() {
             </Field>
 
             <div className="flex flex-wrap gap-2">
-              <button type="button" className="btn-primary" onClick={saveJob}>
+              <button type="button" className="btn-primary" onClick={() => void saveJob()}>
                 <Save className="size-4" /> Save job
               </button>
               <button type="button" className="btn-outline" onClick={cancelEdit}>
