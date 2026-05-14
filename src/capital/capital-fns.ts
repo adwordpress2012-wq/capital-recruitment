@@ -7,7 +7,12 @@ import type { Job } from "@/data/jobs";
 import { jobsById, SEED_JOBS } from "@/data/jobs";
 import { getLiveJobsForPublic } from "@/lib/jobs-repo";
 import { isAdminAuthConfigured, isSupabaseBackendConfigured, readCapitalServerEnv } from "@/capital/capital-config";
-import { jobRowToJob, jobToDbRow, type CapitalJobRow } from "@/capital/capital-job-map";
+import {
+  jobRowToJob,
+  jobToDbRow,
+  slugJobIdFromTitle,
+  type CapitalJobRow,
+} from "@/capital/capital-job-map";
 import { createAdminSessionToken, verifyAdminSessionToken } from "@/capital/capital-session";
 
 const RESUME_BUCKET = "capital-resumes";
@@ -112,11 +117,12 @@ export const adminListJobsFn = createServerFn({ method: "POST" })
 const jobSaveSchema = z.object({
   adminToken: z.string().min(10),
   job: z.object({
-    id: z.string().min(1),
+    id: z.string().optional(),
     title: z.string(),
     industry: z.string(),
     location: z.string(),
-    type: z.enum(["Full-time", "Casual", "Contract", "Temporary"]),
+    /** DB allows any label; keep loose so legacy rows still save after load. */
+    type: z.string().min(1),
     rate: z.string(),
     posted: z.string(),
     summary: z.string(),
@@ -126,17 +132,27 @@ const jobSaveSchema = z.object({
   }),
 });
 
+function formatSupabaseWriteError(err: { message?: string; code?: string; details?: string | null; hint?: string | null }) {
+  const parts = [err.message, err.code, err.details, err.hint].filter(
+    (p): p is string => typeof p === "string" && p.length > 0,
+  );
+  return parts.join(" — ") || "Database write failed.";
+}
+
 export const adminSaveJobFn = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => jobSaveSchema.parse(input))
   .handler(async ({ data }) => {
     requireAdminToken(data.adminToken);
     const env = readCapitalServerEnv();
     if (!isSupabaseBackendConfigured(env)) throw new Error("Supabase is not configured.");
-    const row = jobToDbRow(data.job as Job);
+    const incoming = data.job;
+    const id = incoming.id?.trim() ? incoming.id.trim() : slugJobIdFromTitle(incoming.title || "job");
+    const job: Job = { ...incoming, id } as Job;
+    const row = jobToDbRow(job);
     const { error } = await serviceClient().from("capital_jobs").upsert(row, { onConflict: "id" });
     if (error) {
       console.error(error);
-      throw new Error("Could not save job.");
+      throw new Error(`Could not save job: ${formatSupabaseWriteError(error)}`);
     }
     return { ok: true as const };
   });

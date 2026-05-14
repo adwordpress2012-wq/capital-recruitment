@@ -21,6 +21,7 @@ export function readCapitalServerEnv(): CapitalServerEnv {
     process.env.VITE_PUBLIC_SUPABASE_ANON_KEY ||
     process.env.PUBLIC_SUPABASE_ANON_KEY ||
     "";
+  /** Server-only; do not use VITE_* or NEXT_PUBLIC_* for this key. */
   const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
   const adminPassword = process.env.CAPITAL_ADMIN_PASSWORD || "";
   const adminSessionSecret =

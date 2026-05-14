@@ -109,8 +109,8 @@ function AdminJobsPage() {
       await adminSaveJobFn({ data: { adminToken: token, job: normalized } });
       cancelEdit();
       await reload();
-    } catch {
-      setLoadError("Could not save job.");
+    } catch (e) {
+      setLoadError(e instanceof Error ? e.message : "Could not save job.");
     }
   };
 
