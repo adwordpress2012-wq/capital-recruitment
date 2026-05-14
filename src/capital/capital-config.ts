@@ -1,5 +1,16 @@
 /** Server-side Supabase + admin auth env (read only inside server function handlers). */
 
+let capitalBackendStatusLogged = false;
+
+function logCapitalBackendStatusOnce(env: CapitalServerEnv) {
+  if (capitalBackendStatusLogged) return;
+  capitalBackendStatusLogged = true;
+  if (process.env.NODE_ENV !== "production") return;
+  const backendConfigured = isSupabaseBackendConfigured(env);
+  const serviceRolePresent = Boolean(env.supabaseServiceRoleKey?.trim());
+  console.info("[capital]", JSON.stringify({ backendConfigured, serviceRolePresent }));
+}
+
 export type CapitalServerEnv = {
   supabaseUrl: string;
   supabaseAnonKey: string;
@@ -27,13 +38,15 @@ export function readCapitalServerEnv(): CapitalServerEnv {
   const adminSessionSecret =
     process.env.CAPITAL_ADMIN_SESSION_SECRET || process.env.SUPABASE_JWT_SECRET || "";
 
-  return {
+  const env: CapitalServerEnv = {
     supabaseUrl,
     supabaseAnonKey,
     supabaseServiceRoleKey,
     adminPassword,
     adminSessionSecret,
   };
+  logCapitalBackendStatusOnce(env);
+  return env;
 }
 
 export function isSupabaseBackendConfigured(env: CapitalServerEnv): boolean {

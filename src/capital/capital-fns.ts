@@ -376,7 +376,7 @@ export const submitContactMessageFn = createServerFn({ method: "POST" })
       message: data.message,
     });
     if (error) {
-      console.error(error);
+      logCapital("contact_messages.insert", error);
       return { ok: false as const, error: "Could not send your message. Please try again." };
     }
     return { ok: true as const };
@@ -415,7 +415,7 @@ export const submitEmployerEnquiryFn = createServerFn({ method: "POST" })
       details: data.details,
     });
     if (error) {
-      console.error(error);
+      logCapital("employer_enquiries.insert", error);
       return { ok: false as const, error: "Could not submit your enquiry. Please try again." };
     }
     return { ok: true as const };
