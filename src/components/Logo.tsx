@@ -1,8 +1,13 @@
-const LOGO_SRC = "/logo/capital-recruitment-full.png";
+const LOGO_FULL_SRC = "/logo/capital-recruitment-full.png";
+const LOGO_NAVBAR_SRC = "/logo/capital-recruitment-navbar.png";
 
-/** Natural dimensions of `capital-recruitment-full.png` (for aspect ratio / CLS). */
-const LOGO_NATURAL_W = 1024;
-const LOGO_NATURAL_H = 608;
+/** Stacked mark — footer / default. */
+const FULL_NATURAL_W = 1024;
+const FULL_NATURAL_H = 608;
+
+/** Wide navbar mark — tighter crop for less vertical whitespace. */
+const NAVBAR_NATURAL_W = 1024;
+const NAVBAR_NATURAL_H = 496;
 
 export function Logo({
   variant = "dark",
@@ -10,27 +15,31 @@ export function Logo({
   className,
 }: {
   variant?: "dark" | "light";
-  /** `navbar`: header / mobile drawer — fixed height band, no max-width crop. */
+  /** `navbar`: header / mobile drawer — wide asset, fixed heights, aspect preserved. */
   placement?: "navbar" | "default";
   className?: string;
 }) {
   const isNavbar = placement === "navbar";
 
   const shell = isNavbar
-    ? `inline-flex items-center ${className ?? ""}`.trim()
+    ? `inline-flex items-center leading-none ${className ?? ""}`.trim()
     : `${variant === "light" ? "inline-flex rounded-xl bg-white p-2 shadow-[0_2px_14px_rgba(0,0,0,0.22)] ring-1 ring-black/5" : "inline-flex"} ${className ?? ""}`.trim();
 
+  const src = isNavbar ? LOGO_NAVBAR_SRC : LOGO_FULL_SRC;
+  const nw = isNavbar ? NAVBAR_NATURAL_W : FULL_NATURAL_W;
+  const nh = isNavbar ? NAVBAR_NATURAL_H : FULL_NATURAL_H;
+
   const imgClass = isNavbar
-    ? "block h-9 w-auto object-contain object-left md:h-11 lg:h-12 xl:h-[52px]"
+    ? "block h-[42px] w-auto max-h-[42px] object-contain object-left lg:h-[52px] lg:max-h-[52px]"
     : "h-9 w-auto max-w-[min(100%,220px)] object-contain object-left sm:h-10 sm:max-w-[260px] md:h-11 md:max-w-[280px]";
 
   return (
     <div className={shell}>
       <img
-        src={LOGO_SRC}
+        src={src}
         alt="Capital Recruitment Agency"
-        width={LOGO_NATURAL_W}
-        height={LOGO_NATURAL_H}
+        width={nw}
+        height={nh}
         decoding="async"
         className={imgClass}
       />

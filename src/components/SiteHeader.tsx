@@ -26,49 +26,59 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all ${
-        scrolled ? "backdrop-blur-md bg-background/80 border-b" : "bg-background"
+      className={`sticky top-0 z-50 w-full bg-background transition-[border-color,box-shadow,background-color] duration-200 ease-out ${
+        scrolled
+          ? "border-b border-border/60 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-background/85"
+          : ""
       }`}
     >
-      <div className="container-x flex min-h-[4.5rem] items-center justify-between gap-3 py-2 sm:py-3">
-        <Link to="/" className="flex shrink-0 items-center self-center">
+      <div className="container-x flex items-center justify-between gap-4 py-1.5 sm:gap-5 sm:py-2 lg:gap-8 lg:py-2">
+        <Link
+          to="/"
+          className="group inline-flex shrink-0 items-center rounded-md outline-none transition duration-200 ease-out hover:opacity-[0.92] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[color:var(--lime-soft)]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
           <Logo placement="navbar" />
         </Link>
-        <nav className="hidden lg:flex items-center gap-1">
-          {NAV.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              className="px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground rounded-full transition-colors"
-              activeProps={{
-                className: "px-4 py-2 text-sm font-semibold text-foreground rounded-full bg-muted",
-              }}
-              activeOptions={{ exact: n.to === "/" }}
-            >
-              {n.label}
-            </Link>
-          ))}
+        <nav className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center">
+          <div className="flex items-center gap-0.5">
+            {NAV.map((n) => (
+              <Link
+                key={n.to}
+                to={n.to}
+                className="px-3.5 py-2 text-sm font-medium text-foreground/80 transition-colors duration-150 ease-out hover:text-foreground rounded-full"
+                activeProps={{
+                  className:
+                    "px-3.5 py-2 text-sm font-semibold text-foreground rounded-full bg-muted transition-colors duration-150 ease-out",
+                }}
+                activeOptions={{ exact: n.to === "/" }}
+              >
+                {n.label}
+              </Link>
+            ))}
+          </div>
         </nav>
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden shrink-0 items-center lg:flex">
           <Link to="/contact" className="btn-primary">
             Get in touch <ArrowRight className="size-4" />
           </Link>
         </div>
         <button
-          className="lg:hidden inline-flex items-center justify-center rounded-full border p-2"
+          type="button"
+          className="inline-flex shrink-0 items-center justify-center rounded-full border p-2 transition-colors duration-150 ease-out hover:bg-muted lg:hidden"
           onClick={() => setOpen((o) => !o)}
           aria-label="Toggle menu"
+          aria-expanded={open}
         >
           {open ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
       </div>
       {open && (
-        <div className="lg:hidden border-t bg-background">
-          <div className="container-x flex flex-col gap-1 py-4">
+        <div className="border-t border-border/60 bg-background lg:hidden">
+          <div className="container-x flex flex-col gap-0.5 py-3">
             <Link
               to="/"
               onClick={() => setOpen(false)}
-              className="flex items-center px-3 py-2"
+              className="group inline-flex w-fit items-center rounded-md px-2 py-1.5 outline-none transition duration-200 ease-out hover:opacity-[0.92] active:scale-[0.98]"
               aria-label="Capital Recruitment home"
             >
               <Logo placement="navbar" />
@@ -78,7 +88,7 @@ export function SiteHeader() {
                 key={n.to}
                 to={n.to}
                 onClick={() => setOpen(false)}
-                className="px-3 py-3 text-sm font-medium rounded-lg hover:bg-muted"
+                className="px-3 py-2.5 text-sm font-medium transition-colors duration-150 ease-out rounded-lg hover:bg-muted"
               >
                 {n.label}
               </Link>
