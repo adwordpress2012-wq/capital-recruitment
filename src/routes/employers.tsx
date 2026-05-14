@@ -172,13 +172,6 @@ function EmployerForm() {
             Share volumes, timelines and site requirements — a consultant will respond with
             practical next steps.
           </p>
-          {!useFormspree && (
-            <p className="mt-4 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white/90">
-              <strong>TODO:</strong> Set{" "}
-              <code className="rounded bg-black/20 px-1">VITE_FORMSPREE_EMPLOYER_ACTION</code> to
-              post this form to your team automatically.
-            </p>
-          )}
         </div>
         {useFormspree ? (
           <form
@@ -247,7 +240,7 @@ function EmployerForm() {
               />
             </div>
             <button type="submit" className="btn-primary w-full opacity-60" disabled>
-              Submit enquiry (configure Formspree) <ArrowRight className="size-4" />
+              Submit enquiry <ArrowRight className="size-4" />
             </button>
           </form>
         )}

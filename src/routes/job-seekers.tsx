@@ -135,9 +135,9 @@ function JobSeekersPage() {
             <h2 className="text-3xl font-bold md:text-4xl">Submit your application in minutes.</h2>
             <p className="mt-3 text-white/75">
               Upload your resume, confirm work rights and availability, and tell us the roles you
-              want. Applications are intended to route to{" "}
-              <span className="font-semibold text-white">paul@capitalrecruitment.com.au</span> once
-              your form handler is configured.
+              want. Applications are reviewed by our team — you can also email{" "}
+              <span className="font-semibold text-white">paul@capitalrecruitment.com.au</span>{" "}
+              directly if you prefer.
             </p>
           </div>
           <div className="flex flex-col justify-center gap-3">

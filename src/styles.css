@@ -3,6 +3,12 @@
 
 @source "../src";
 
+/*
+  Capital Recruitment — design intent (tokens + utilities below):
+  Modern corporate / labour hire; clean white chrome; green accent; generous readable spacing;
+  mobile-first; minimal glow and glass effects; premium-subtle CTAs; trustworthy, not flashy SaaS.
+*/
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -79,13 +85,18 @@
     135deg,
     oklch(0.32 0.06 195) 0%,
     oklch(0.42 0.1 175) 60%,
-    oklch(0.55 0.15 155) 100%
+    oklch(0.5 0.12 165) 100%
   );
   --gradient-cta: linear-gradient(120deg, oklch(0.25 0.05 200) 0%, oklch(0.35 0.08 185) 100%);
-  --gradient-lime: linear-gradient(135deg, oklch(0.72 0.16 150), oklch(0.82 0.2 135));
-  --shadow-elegant: 0 20px 60px -25px color-mix(in oklab, var(--teal-deep) 40%, transparent);
-  --shadow-card: 0 1px 2px rgba(15, 76, 92, 0.04), 0 8px 30px -12px rgba(15, 76, 92, 0.08);
-  --shadow-glow: 0 0 60px -10px color-mix(in oklab, var(--lime) 50%, transparent);
+  /* Brand green — slight shift only (avoid loud dual-tone / glowy marketing gradients) */
+  --gradient-lime: linear-gradient(
+    180deg,
+    oklch(0.73 0.14 150) 0%,
+    oklch(0.68 0.14 152) 100%
+  );
+  --shadow-elegant: 0 12px 40px -20px color-mix(in oklab, var(--navy) 18%, transparent);
+  --shadow-card: 0 1px 0 rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 24px -12px rgba(15, 23, 42, 0.08);
 }
 
 .dark {
@@ -124,25 +135,33 @@
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
+  h1 {
+    letter-spacing: -0.03em;
+  }
+  p {
+    text-wrap: pretty;
+  }
 }
 
 @layer components {
   .container-x {
-    @apply mx-auto w-full max-w-7xl px-6 lg:px-10;
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-10;
   }
   .eyebrow {
     @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] uppercase;
     color: var(--lime-soft);
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-black/[0.06] px-6 py-3 text-sm font-semibold transition-[background-color,box-shadow,transform,color] duration-200 ease-out;
     background: var(--gradient-lime);
     color: oklch(0.18 0.04 245);
-    box-shadow: 0 8px 24px -10px color-mix(in oklab, var(--lime) 60%, transparent);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 1px 2px rgba(15, 23, 42, 0.06),
+      0 4px 12px -4px color-mix(in oklab, var(--lime-soft) 35%, transparent);
   }
   .btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 14px 30px -10px color-mix(in oklab, var(--lime) 70%, transparent);
+    transform: translateY(-0.5px);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 2px 4px rgba(15, 23, 42, 0.06),
+      0 8px 20px -6px color-mix(in oklab, var(--lime-soft) 40%, transparent);
   }
   .btn-outline {
     @apply inline-flex items-center justify-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition-all;
@@ -162,12 +181,12 @@
     background: rgba(255, 255, 255, 0.08);
   }
   .card-soft {
-    @apply rounded-2xl border bg-card p-6 transition-all;
+    @apply rounded-2xl border bg-card p-6 transition-[transform,box-shadow] duration-200 ease-out;
     box-shadow: var(--shadow-card);
   }
   .card-soft:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-elegant);
+    transform: translateY(-1px);
+    box-shadow: 0 1px 0 rgba(15, 23, 42, 0.05), 0 4px 16px -8px rgba(15, 23, 42, 0.1);
   }
   .grad-hero {
     background: var(--gradient-hero);
@@ -176,10 +195,15 @@
     background: var(--gradient-cta);
   }
   .grad-lime {
-    background: var(--gradient-lime);
+    background: var(--lime-soft);
   }
   .text-gradient-lime {
-    background: var(--gradient-lime);
+    background: linear-gradient(
+      105deg,
+      oklch(0.62 0.13 152) 0%,
+      oklch(0.72 0.15 148) 55%,
+      oklch(0.66 0.13 150) 100%
+    );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;

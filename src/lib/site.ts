@@ -16,8 +16,8 @@ export const EMAIL_PAUL = "paul@capitalrecruitment.com.au" as const;
 /** Applications and resumes are directed here. */
 export const EMAIL_APPLICATIONS = EMAIL_PAUL;
 
-/** Phone not finalised — display as placeholder until confirmed. */
-export const PHONE_DISPLAY = "Phone number coming soon" as const;
+/** Public office phone — shown in footer and contact when set. */
+export const SITE_PHONE: string | null = null;
 
 export const MAP_EMBED_QUERY = encodeURIComponent("70 Moore Street, Liverpool NSW 2170, Australia");
 

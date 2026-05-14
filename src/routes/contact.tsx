@@ -7,7 +7,7 @@ import {
   EMAIL_HR,
   EMAIL_PAUL,
   MAP_EMBED_QUERY,
-  PHONE_DISPLAY,
+  SITE_PHONE,
 } from "@/lib/site";
 import { FORMSPREE_CONTACT_ACTION } from "@/lib/forms";
 
@@ -53,13 +53,6 @@ function ContactPage() {
             Whether you are scaling a site team or looking for your next role, our Liverpool NSW
             office supports employers and candidates across Greater Sydney and beyond.
           </p>
-          {!useFormspree && (
-            <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-              <strong>TODO:</strong> Set{" "}
-              <code className="rounded bg-white/80 px-1">VITE_FORMSPREE_CONTACT_ACTION</code> to
-              enable the enquiry form to email your team automatically.
-            </p>
-          )}
         </div>
       </section>
 
@@ -84,30 +77,35 @@ function ContactPage() {
               <Mail className="size-5 text-[color:var(--navy)]" />
             </div>
             <div className="text-sm text-muted-foreground">Accounts &amp; HR</div>
-            <div className="mt-3 space-y-1 text-sm font-semibold">
+            <div className="mt-3 space-y-2 text-sm font-semibold">
               <div>
                 <a
-                  className="break-all underline-offset-2 hover:underline"
-                  href={`mailto:${EMAIL_ACCOUNTS}`}
+                  className="block break-all underline-offset-2 hover:underline"
+                  href={`mailto:${EMAIL_HR}`}
                 >
-                  {EMAIL_ACCOUNTS}
+                  {EMAIL_HR}
                 </a>
               </div>
               <div>
                 <a
-                  className="break-all underline-offset-2 hover:underline"
-                  href={`mailto:${EMAIL_HR}`}
+                  className="block break-all underline-offset-2 hover:underline"
+                  href={`mailto:${EMAIL_ACCOUNTS}`}
                 >
-                  {EMAIL_HR}
+                  {EMAIL_ACCOUNTS}
                 </a>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-6 rounded-2xl border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
-          <span className="font-semibold text-foreground">Phone:</span> {PHONE_DISPLAY}
-        </div>
+        {SITE_PHONE ? (
+          <div className="mt-6 rounded-2xl border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
+            <span className="font-semibold text-foreground">Phone:</span>{" "}
+            <a className="underline-offset-2 hover:underline" href={`tel:${SITE_PHONE.replace(/\s/g, "")}`}>
+              {SITE_PHONE}
+            </a>
+          </div>
+        ) : null}
 
         <div className="mt-10 grid gap-8 lg:grid-cols-2">
           {useFormspree ? (
@@ -192,7 +190,7 @@ function ContactPage() {
                 />
               </div>
               <button type="submit" className="btn-primary opacity-60" disabled>
-                Send message (configure Formspree) <ArrowRight className="size-4" />
+                Send message <ArrowRight className="size-4" />
               </button>
             </form>
           )}

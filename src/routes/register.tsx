@@ -5,8 +5,6 @@ import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
 import { INDUSTRY_LABELS } from "@/data/industries";
 import { FORMSPREE_CANDIDATE_ACTION, FORMSPREE_CANDIDATE_FILE_UPLOAD_ENABLED } from "@/lib/forms";
-import { EMAIL_APPLICATIONS } from "@/lib/site";
-
 export const Route = createFileRoute("/register")({
   validateSearch: (search: Record<string, unknown>) => ({
     role: typeof search.role === "string" ? search.role : "",
@@ -57,18 +55,8 @@ function RegisterPage() {
           </h1>
           <p className="mt-5 text-lg text-muted-foreground">
             Tell us about your experience, work rights and availability. Applications and resumes
-            are reviewed by our consultants and routed to{" "}
-            <span className="font-medium text-foreground">{EMAIL_APPLICATIONS}</span> once your form
-            handler is connected.
+            are reviewed by our consultants. We will contact you using the details you provide.
           </p>
-          {!useFormspree && (
-            <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-              <strong>TODO:</strong> Add a Formspree (or similar) form action in{" "}
-              <code className="rounded bg-white/80 px-1">VITE_FORMSPREE_CANDIDATE_ACTION</code>{" "}
-              inside your environment variables so submissions email {EMAIL_APPLICATIONS}. Until
-              then, this form will not send.
-            </p>
-          )}
         </div>
       </section>
 
@@ -342,7 +330,7 @@ function RegisterPage() {
                   Terms &amp; Conditions.
                 </label>
                 <button type="submit" className="btn-primary justify-center opacity-60" disabled>
-                  Submit application (configure Formspree) <ArrowRight className="size-4" />
+                  Submit application <ArrowRight className="size-4" />
                 </button>
               </form>
             )}

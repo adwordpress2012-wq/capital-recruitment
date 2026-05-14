@@ -4,7 +4,7 @@ import {
   ShieldCheck,
   Users,
   Zap,
-  Sparkles,
+  Layers,
   MapPin,
   Briefcase,
   CheckCircle2,
@@ -75,7 +75,7 @@ const WHY = [
     desc: "When timelines tighten, we move quickly with structured shortlisting and compliant placement.",
   },
   {
-    icon: Sparkles,
+    icon: Layers,
     title: "Flexible engagement",
     desc: "Casual, temporary, project, shutdown and permanent — scaled to your operational rhythm.",
   },
@@ -211,7 +211,7 @@ function HomePage() {
               {[
                 { icon: Users, t: "Quality people", s: "Skilled, reliable and job-ready" },
                 { icon: ShieldCheck, t: "Safety first", s: "WHS-aware recruitment and placement" },
-                { icon: Sparkles, t: "Flexible models", s: "Casual, project and permanent" },
+                { icon: Layers, t: "Flexible models", s: "Casual, project and permanent" },
               ].map(({ icon: Icon, t, s }) => (
                 <div key={t} className="flex flex-col gap-2">
                   <span className="inline-flex size-9 items-center justify-center rounded-full bg-[color:var(--surface)] text-[color:var(--lime-soft)]">
@@ -224,10 +224,6 @@ function HomePage() {
             </div>
           </div>
           <div className="relative">
-            <div
-              className="absolute -inset-4 rounded-[3rem] grad-lime opacity-20 blur-3xl"
-              aria-hidden
-            />
             <div className="relative overflow-hidden rounded-[2rem] border shadow-[var(--shadow-elegant)]">
               <img
                 src={heroMain}
@@ -416,7 +412,7 @@ function HomePage() {
       <section className="container-x">
         <div className="relative grad-cta overflow-hidden rounded-[2rem] p-10 text-white md:p-16">
           <div
-            className="absolute -right-32 -top-32 size-96 rounded-full grad-lime opacity-25 blur-3xl"
+            className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-[color:var(--lime-soft)]/12"
             aria-hidden
           />
           <div className="relative grid items-center gap-8 md:grid-cols-2">

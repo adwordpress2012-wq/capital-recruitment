@@ -23,7 +23,7 @@ export function Logo({
 
   const shell = isNavbar
     ? `inline-flex items-center leading-none ${className ?? ""}`.trim()
-    : `${variant === "light" ? "inline-flex rounded-xl bg-white p-2 shadow-[0_2px_14px_rgba(0,0,0,0.22)] ring-1 ring-black/5" : "inline-flex"} ${className ?? ""}`.trim();
+    : `${variant === "light" ? "inline-flex rounded-xl bg-white p-2 shadow-sm ring-1 ring-black/[0.06]" : "inline-flex"} ${className ?? ""}`.trim();
 
   const src = isNavbar ? LOGO_NAVBAR_SRC : LOGO_FULL_SRC;
   const nw = isNavbar ? NAVBAR_NATURAL_W : FULL_NATURAL_W;

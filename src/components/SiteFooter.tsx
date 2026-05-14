@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, MapPin, Linkedin, Facebook, Instagram } from "lucide-react";
 import { Logo } from "./Logo";
-import { BUSINESS_ADDRESS, EMAIL_ACCOUNTS, EMAIL_HR, EMAIL_PAUL, PHONE_DISPLAY } from "@/lib/site";
+import { BUSINESS_ADDRESS, EMAIL_ACCOUNTS, EMAIL_HR, EMAIL_PAUL, SITE_PHONE } from "@/lib/site";
 
 export function SiteFooter() {
   return (
@@ -22,7 +22,7 @@ export function SiteFooter() {
               <button
                 key={label}
                 type="button"
-                aria-label={`${label} (coming soon)`}
+                aria-label={label}
                 className="rounded-full border border-white/15 p-2 transition hover:bg-white/10"
               >
                 <Icon className="size-4" />
@@ -73,28 +73,40 @@ export function SiteFooter() {
             </li>
             <li className="flex gap-3">
               <Mail className="mt-0.5 size-4 shrink-0 text-[color:var(--lime)]" />
-              <span className="space-y-1">
-                <a
-                  className="block break-all font-medium text-white hover:underline"
-                  href={`mailto:${EMAIL_PAUL}`}
-                >
-                  {EMAIL_PAUL}
-                </a>
-                <a
-                  className="block break-all text-white/70 hover:text-white hover:underline"
-                  href={`mailto:${EMAIL_HR}`}
-                >
-                  {EMAIL_HR}
-                </a>
-                <a
-                  className="block break-all text-white/70 hover:text-white hover:underline"
-                  href={`mailto:${EMAIL_ACCOUNTS}`}
-                >
-                  {EMAIL_ACCOUNTS}
-                </a>
-              </span>
+              <ul className="list-none space-y-2 p-0">
+                <li>
+                  <a
+                    className="block break-all font-medium text-white hover:underline"
+                    href={`mailto:${EMAIL_PAUL}`}
+                  >
+                    {EMAIL_PAUL}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="block break-all text-white/70 hover:text-white hover:underline"
+                    href={`mailto:${EMAIL_HR}`}
+                  >
+                    {EMAIL_HR}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="block break-all text-white/70 hover:text-white hover:underline"
+                    href={`mailto:${EMAIL_ACCOUNTS}`}
+                  >
+                    {EMAIL_ACCOUNTS}
+                  </a>
+                </li>
+              </ul>
             </li>
-            <li className="text-sm text-white/70">{PHONE_DISPLAY}</li>
+            {SITE_PHONE ? (
+              <li className="text-sm text-white/70">
+                <a href={`tel:${SITE_PHONE.replace(/\s/g, "")}`} className="hover:text-white hover:underline">
+                  {SITE_PHONE}
+                </a>
+              </li>
+            ) : null}
             <li className="flex flex-col gap-2 pt-2">
               <Link to="/register" className="font-medium text-white transition hover:underline">
                 Candidate application →
@@ -148,11 +160,8 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-x flex flex-col items-center justify-between gap-4 py-6 text-xs text-white/50 md:flex-row">
+        <div className="container-x flex flex-col items-center justify-center gap-4 py-6 text-xs text-white/50 md:flex-row">
           <div>© {new Date().getFullYear()} Capital Recruitment Agency. All rights reserved.</div>
-          <div className="text-center md:text-right">
-            ABN details can be added here when confirmed.
-          </div>
         </div>
       </div>
     </footer>

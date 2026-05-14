@@ -57,13 +57,6 @@ function EmployerEnquiryPage() {
             Share site context, volumes and timelines. A consultant will respond with practical
             recommendations — including what is realistic on sourcing and mobilisation.
           </p>
-          {!useFormspree && (
-            <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-              <strong>TODO:</strong> Set{" "}
-              <code className="rounded bg-white/80 px-1">VITE_FORMSPREE_EMPLOYER_ACTION</code> to
-              enable automatic email delivery of this enquiry form.
-            </p>
-          )}
         </div>
       </section>
 
@@ -224,7 +217,7 @@ function EmployerEnquiryPage() {
                 </label>
 
                 <button type="submit" className="btn-primary justify-center opacity-60" disabled>
-                  Submit enquiry (configure Formspree) <ArrowRight className="size-4" />
+                  Submit enquiry <ArrowRight className="size-4" />
                 </button>
               </form>
             )}

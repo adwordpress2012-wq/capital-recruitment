@@ -26,10 +26,8 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full bg-background transition-[border-color,box-shadow,background-color] duration-200 ease-out ${
-        scrolled
-          ? "border-b border-border/60 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-background/85"
-          : ""
+      className={`sticky top-0 z-50 w-full bg-white transition-[border-color,box-shadow] duration-200 ease-out ${
+        scrolled ? "border-b border-border/70 shadow-[0_1px_0_rgba(15,23,42,0.04)]" : ""
       }`}
     >
       <div className="container-x flex items-center justify-between gap-4 py-1.5 sm:gap-5 sm:py-2 lg:gap-8 lg:py-2">
@@ -73,7 +71,7 @@ export function SiteHeader() {
         </button>
       </div>
       {open && (
-        <div className="border-t border-border/60 bg-background lg:hidden">
+        <div className="border-t border-border/70 bg-white lg:hidden">
           <div className="container-x flex flex-col gap-0.5 py-3">
             <Link
               to="/"
