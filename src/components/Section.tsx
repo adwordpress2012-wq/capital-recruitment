@@ -23,9 +23,7 @@ export function Section({
         {(eyebrow || title || intro) && (
           <div className={`max-w-3xl mb-12 ${align === "center" ? "mx-auto text-center" : ""}`}>
             {eyebrow && <div className="eyebrow mb-4">{eyebrow}</div>}
-            {title && (
-              <h2 className="text-3xl md:text-5xl font-bold leading-[1.05]">{title}</h2>
-            )}
+            {title && <h2 className="text-3xl md:text-5xl font-bold leading-[1.05]">{title}</h2>}
             {intro && <p className="mt-5 text-lg text-muted-foreground">{intro}</p>}
           </div>
         )}

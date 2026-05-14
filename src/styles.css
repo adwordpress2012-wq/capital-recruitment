@@ -47,11 +47,11 @@
   --radius: 0.875rem;
 
   /* Brand */
-  --teal-deep: oklch(0.32 0.06 195);     /* #0F4C5C-ish */
+  --teal-deep: oklch(0.32 0.06 195); /* #0F4C5C-ish */
   --teal: oklch(0.42 0.08 190);
-  --lime: oklch(0.78 0.21 135);          /* #7AC943 vibrant */
-  --lime-soft: oklch(0.72 0.16 150);     /* #1BA672 brand green */
-  --navy: oklch(0.18 0.04 245);          /* charcoal navy */
+  --lime: oklch(0.78 0.21 135); /* #7AC943 vibrant */
+  --lime-soft: oklch(0.72 0.16 150); /* #1BA672 brand green */
+  --navy: oklch(0.18 0.04 245); /* charcoal navy */
   --surface: oklch(0.975 0.005 150);
 
   --background: oklch(1 0 0);
@@ -75,9 +75,14 @@
   --input: oklch(0.92 0.008 200);
   --ring: var(--teal);
 
-  --gradient-hero: linear-gradient(135deg, oklch(0.32 0.06 195) 0%, oklch(0.42 0.10 175) 60%, oklch(0.55 0.15 155) 100%);
+  --gradient-hero: linear-gradient(
+    135deg,
+    oklch(0.32 0.06 195) 0%,
+    oklch(0.42 0.1 175) 60%,
+    oklch(0.55 0.15 155) 100%
+  );
   --gradient-cta: linear-gradient(120deg, oklch(0.25 0.05 200) 0%, oklch(0.35 0.08 185) 100%);
-  --gradient-lime: linear-gradient(135deg, oklch(0.72 0.16 150), oklch(0.82 0.20 135));
+  --gradient-lime: linear-gradient(135deg, oklch(0.72 0.16 150), oklch(0.82 0.2 135));
   --shadow-elegant: 0 20px 60px -25px color-mix(in oklab, var(--teal-deep) 40%, transparent);
   --shadow-card: 0 1px 2px rgba(15, 76, 92, 0.04), 0 8px 30px -12px rgba(15, 76, 92, 0.08);
   --shadow-glow: 0 0 60px -10px color-mix(in oklab, var(--lime) 50%, transparent);
@@ -99,22 +104,32 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html { scroll-behavior: smooth; }
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4, h5 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
 }
 
 @layer components {
-  .container-x { @apply mx-auto w-full max-w-7xl px-6 lg:px-10; }
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-6 lg:px-10;
+  }
   .eyebrow {
     @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] uppercase;
     color: var(--lime-soft);
@@ -125,28 +140,44 @@
     color: oklch(0.18 0.04 245);
     box-shadow: 0 8px 24px -10px color-mix(in oklab, var(--lime) 60%, transparent);
   }
-  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -10px color-mix(in oklab, var(--lime) 70%, transparent); }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px -10px color-mix(in oklab, var(--lime) 70%, transparent);
+  }
   .btn-outline {
     @apply inline-flex items-center justify-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition-all;
     border-color: var(--border);
     background: var(--background);
     color: var(--foreground);
   }
-  .btn-outline:hover { background: var(--surface); }
+  .btn-outline:hover {
+    background: var(--surface);
+  }
   .btn-ghost-light {
     @apply inline-flex items-center justify-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition-all;
-    border-color: rgba(255,255,255,0.25);
+    border-color: rgba(255, 255, 255, 0.25);
     color: white;
   }
-  .btn-ghost-light:hover { background: rgba(255,255,255,0.08); }
+  .btn-ghost-light:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
   .card-soft {
     @apply rounded-2xl border bg-card p-6 transition-all;
     box-shadow: var(--shadow-card);
   }
-  .card-soft:hover { transform: translateY(-3px); box-shadow: var(--shadow-elegant); }
-  .grad-hero { background: var(--gradient-hero); }
-  .grad-cta { background: var(--gradient-cta); }
-  .grad-lime { background: var(--gradient-lime); }
+  .card-soft:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-elegant);
+  }
+  .grad-hero {
+    background: var(--gradient-hero);
+  }
+  .grad-cta {
+    background: var(--gradient-cta);
+  }
+  .grad-lime {
+    background: var(--gradient-lime);
+  }
   .text-gradient-lime {
     background: var(--gradient-lime);
     -webkit-background-clip: text;

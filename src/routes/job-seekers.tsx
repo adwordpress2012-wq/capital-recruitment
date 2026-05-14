@@ -1,46 +1,87 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, Upload, Search, MessageSquare, Briefcase, Calendar } from "lucide-react";
-import jsImg from "@/assets/jobseekers.jpg";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Upload,
+  Search,
+  MessageSquare,
+  Briefcase,
+  Calendar,
+} from "lucide-react";
+import { jobSeekersCareer } from "@/lib/images";
 import { Section } from "@/components/Section";
 
 export const Route = createFileRoute("/job-seekers")({
   head: () => ({
     meta: [
-      { title: "Job Seekers — Find Work in Australia | Capital Recruitment" },
-      { name: "description", content: "Find rewarding job opportunities across warehousing, construction, manufacturing and more. Flexible work, weekly pay and a supportive recruitment team." },
-      { property: "og:title", content: "Find Work with Capital Recruitment" },
-      { property: "og:description", content: "Build your future. Apply with us today." },
+      {
+        title: "Job Seekers — Labour Hire & Industrial Roles | Capital Recruitment Liverpool NSW",
+      },
+      {
+        name: "description",
+        content:
+          "Apply for labour hire and industrial roles across Greater Sydney. Candidate applications for warehousing recruitment, construction labour hire, security labour hire and more — Capital Recruitment Agency.",
+      },
+      {
+        name: "keywords",
+        content:
+          "candidate applications, labour hire Liverpool NSW, industrial staffing, recruitment agency Liverpool NSW",
+      },
+      { property: "og:title", content: "Find work with Capital Recruitment" },
+      {
+        property: "og:description",
+        content: "Practical support for your next role — apply online today.",
+      },
     ],
   }),
   component: JobSeekersPage,
 });
 
 const BENEFITS = [
-  "Wide range of job opportunities",
-  "Ongoing work & career growth",
-  "Support every step of the way",
-  "Weekly pay & competitive rates",
+  "Roles across warehousing, construction, manufacturing, transport, hospitality, civil, mining, administration and security",
+  "Consultants who explain site expectations clearly — safety, rostering and pay cycles",
+  "Support through screening, interview coordination and start-day readiness",
+  "A professional process — respectful, timely and transparent",
 ];
 
 const PROCESS = [
-  { icon: Upload, t: "Apply", d: "Upload your resume and tell us about you." },
-  { icon: MessageSquare, t: "Screening", d: "Quick chat with our recruitment team." },
-  { icon: Calendar, t: "Interview", d: "Meet the team or hiring manager." },
-  { icon: Briefcase, t: "Placement", d: "Start your next role with full support." },
+  {
+    icon: Upload,
+    t: "Apply",
+    d: "Submit your details and resume online — tell us what you are looking for.",
+  },
+  {
+    icon: MessageSquare,
+    t: "Screening",
+    d: "A consultant will contact you to confirm skills, licences and availability.",
+  },
+  {
+    icon: Calendar,
+    t: "Interview",
+    d: "Where required, we coordinate interviews and site inductions with the client.",
+  },
+  {
+    icon: Briefcase,
+    t: "Placement",
+    d: "When a match is confirmed, we support mobilisation and first-shift expectations.",
+  },
 ];
 
 function JobSeekersPage() {
   return (
     <>
       <section className="container-x pt-12 pb-6">
-        <div className="grid lg:grid-cols-2 gap-10 items-center">
+        <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
-            <div className="eyebrow mb-4">● For Job Seekers</div>
-            <h1 className="text-4xl md:text-6xl font-bold leading-[1.05]">
-              Find opportunities. Build your <span className="text-gradient-lime italic">future</span>.
+            <div className="eyebrow mb-4">● For job seekers</div>
+            <h1 className="text-4xl font-bold leading-[1.05] md:text-6xl">
+              Find work that fits your{" "}
+              <span className="text-gradient-lime italic">skills and goals</span>.
             </h1>
             <p className="mt-6 text-lg text-muted-foreground">
-              We connect skilled and motivated people with rewarding job opportunities across Australia.
+              Whether you want ongoing casual shifts, a project contract or a permanent move, we
+              help you present your experience clearly — licences, safety habits and reliability
+              matter.
             </p>
             <ul className="mt-6 space-y-3">
               {BENEFITS.map((t) => (
@@ -50,69 +91,81 @@ function JobSeekersPage() {
               ))}
             </ul>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#apply" className="btn-primary"><Search className="size-4" /> Search jobs</a>
-              <a href="#apply" className="btn-outline"><Upload className="size-4" /> Upload your resume</a>
+              <Link to="/jobs" className="btn-primary">
+                <Search className="size-4" /> Browse jobs
+              </Link>
+              <Link to="/register" className="btn-outline">
+                <Upload className="size-4" /> Apply online
+              </Link>
             </div>
           </div>
           <div className="relative">
             <div className="overflow-hidden rounded-[2rem] border shadow-[var(--shadow-elegant)]">
-              <img src={jsImg} alt="Job seeker in workforce" className="w-full object-cover" />
+              <img
+                src={jobSeekersCareer}
+                alt="Job seeker exploring industrial career opportunities"
+                className="w-full object-cover"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      <Section eyebrow="Application Process" title="From application to placement">
-        <div className="grid md:grid-cols-4 gap-5">
+      <Section eyebrow="Application process" title="From application to placement">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {PROCESS.map(({ icon: Icon, t, d }, i) => (
             <div key={t} className="card-soft">
-              <div className="flex items-center justify-between mb-3">
-                <div className="size-11 rounded-xl grad-lime inline-flex items-center justify-center">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="inline-flex size-11 items-center justify-center rounded-xl grad-lime">
                   <Icon className="size-5 text-[color:var(--navy)]" />
                 </div>
                 <span className="text-xs font-bold text-muted-foreground">0{i + 1}</span>
               </div>
-              <h3 className="font-bold mb-1">{t}</h3>
+              <h3 className="mb-1 font-bold">{t}</h3>
               <p className="text-sm text-muted-foreground">{d}</p>
             </div>
           ))}
         </div>
       </Section>
 
-      <section id="apply" className="container-x">
-        <div className="grad-cta rounded-[2rem] p-8 md:p-12 text-white grid lg:grid-cols-2 gap-10">
+      <section className="container-x">
+        <div className="grid gap-10 rounded-[2rem] grad-cta p-8 text-white md:p-12 lg:grid-cols-2">
           <div>
-            <div className="eyebrow text-[color:var(--lime)] mb-3">● Apply now</div>
-            <h2 className="text-3xl md:text-4xl font-bold">Register your interest.</h2>
-            <p className="mt-3 text-white/75">Submit your details and our team will be in touch with opportunities that match your skills.</p>
+            <div className="eyebrow mb-3 text-[color:var(--lime)]">● Apply</div>
+            <h2 className="text-3xl font-bold md:text-4xl">Submit your application in minutes.</h2>
+            <p className="mt-3 text-white/75">
+              Upload your resume, confirm work rights and availability, and tell us the roles you
+              want. Applications are intended to route to{" "}
+              <span className="font-semibold text-white">paul@capitalrecruitment.com.au</span> once
+              your form handler is configured.
+            </p>
           </div>
-          <form className="bg-card rounded-2xl p-6 grid gap-4 text-foreground" onSubmit={(e) => e.preventDefault()}>
-            {[["Full name", "text"], ["Email", "email"], ["Phone", "tel"], ["Preferred industry", "text"]].map(([l, t]) => (
-              <div key={l}>
-                <label className="text-xs font-semibold text-muted-foreground">{l}</label>
-                <input type={t} className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]" />
-              </div>
-            ))}
-            <div>
-              <label className="text-xs font-semibold text-muted-foreground">Resume</label>
-              <div className="mt-1 rounded-lg border border-dashed px-3 py-6 text-center text-sm text-muted-foreground">
-                <Upload className="mx-auto size-5 mb-2 text-[color:var(--lime-soft)]" />
-                Drag & drop or click to upload (.pdf, .doc)
-              </div>
-            </div>
-            <button className="btn-primary w-full">Send application <ArrowRight className="size-4" /></button>
-          </form>
+          <div className="flex flex-col justify-center gap-3">
+            <Link to="/register" className="btn-primary w-full justify-center">
+              Start application <ArrowRight className="size-4" />
+            </Link>
+            <Link
+              to="/jobs"
+              className="btn-ghost-light w-full justify-center border border-white/25"
+            >
+              Browse current jobs
+            </Link>
+          </div>
         </div>
       </section>
       <div className="h-10" />
 
       <section className="container-x">
-        <div className="card-soft flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="card-soft flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <div>
-            <h3 className="text-xl font-bold">Looking for something specific?</h3>
-            <p className="text-sm text-muted-foreground">Browse open roles across our active industries.</p>
+            <h3 className="text-xl font-bold">Want to understand our industries first?</h3>
+            <p className="text-sm text-muted-foreground">
+              Explore the sectors we recruit for most often.
+            </p>
           </div>
-          <Link to="/industries" className="btn-outline">Browse industries <ArrowRight className="size-4" /></Link>
+          <Link to="/industries" className="btn-outline">
+            View industries <ArrowRight className="size-4" />
+          </Link>
         </div>
       </section>
       <div className="h-10" />

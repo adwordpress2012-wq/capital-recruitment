@@ -40,7 +40,9 @@ export function SiteHeader() {
               key={n.to}
               to={n.to}
               className="px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground rounded-full transition-colors"
-              activeProps={{ className: "px-4 py-2 text-sm font-semibold text-foreground rounded-full bg-muted" }}
+              activeProps={{
+                className: "px-4 py-2 text-sm font-semibold text-foreground rounded-full bg-muted",
+              }}
               activeOptions={{ exact: n.to === "/" }}
             >
               {n.label}
@@ -73,7 +75,11 @@ export function SiteHeader() {
                 {n.label}
               </Link>
             ))}
-            <Link to="/contact" onClick={() => setOpen(false)} className="btn-primary mt-2 self-start">
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="btn-primary mt-2 self-start"
+            >
               Get in touch <ArrowRight className="size-4" />
             </Link>
           </div>

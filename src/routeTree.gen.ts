@@ -9,19 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WhsCommitmentRouteImport } from './routes/whs-commitment'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as JobSeekersRouteImport } from './routes/job-seekers'
 import { Route as IndustriesRouteImport } from './routes/industries'
+import { Route as EqualOpportunityRouteImport } from './routes/equal-opportunity'
 import { Route as EmployersRouteImport } from './routes/employers'
 import { Route as EmployerEnquiryRouteImport } from './routes/employer-enquiry'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CandidatePrivacyNoticeRouteImport } from './routes/candidate-privacy-notice'
+import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JobsJobIdRouteImport } from './routes/jobs.$jobId'
+import { Route as AdminJobsRouteImport } from './routes/admin.jobs'
 
+const WhsCommitmentRoute = WhsCommitmentRouteImport.update({
+  id: '/whs-commitment',
+  path: '/whs-commitment',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -52,6 +62,11 @@ const IndustriesRoute = IndustriesRouteImport.update({
   path: '/industries',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EqualOpportunityRoute = EqualOpportunityRouteImport.update({
+  id: '/equal-opportunity',
+  path: '/equal-opportunity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EmployersRoute = EmployersRouteImport.update({
   id: '/employers',
   path: '/employers',
@@ -65,6 +80,16 @@ const EmployerEnquiryRoute = EmployerEnquiryRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CandidatePrivacyNoticeRoute = CandidatePrivacyNoticeRouteImport.update({
+  id: '/candidate-privacy-notice',
+  path: '/candidate-privacy-notice',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplyRoute = ApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -82,48 +107,68 @@ const JobsJobIdRoute = JobsJobIdRouteImport.update({
   path: '/$jobId',
   getParentRoute: () => JobsRoute,
 } as any)
+const AdminJobsRoute = AdminJobsRouteImport.update({
+  id: '/admin/jobs',
+  path: '/admin/jobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/apply': typeof ApplyRoute
+  '/candidate-privacy-notice': typeof CandidatePrivacyNoticeRoute
   '/contact': typeof ContactRoute
   '/employer-enquiry': typeof EmployerEnquiryRoute
   '/employers': typeof EmployersRoute
+  '/equal-opportunity': typeof EqualOpportunityRoute
   '/industries': typeof IndustriesRoute
   '/job-seekers': typeof JobSeekersRoute
   '/jobs': typeof JobsRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/terms': typeof TermsRoute
+  '/whs-commitment': typeof WhsCommitmentRoute
+  '/admin/jobs': typeof AdminJobsRoute
   '/jobs/$jobId': typeof JobsJobIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/apply': typeof ApplyRoute
+  '/candidate-privacy-notice': typeof CandidatePrivacyNoticeRoute
   '/contact': typeof ContactRoute
   '/employer-enquiry': typeof EmployerEnquiryRoute
   '/employers': typeof EmployersRoute
+  '/equal-opportunity': typeof EqualOpportunityRoute
   '/industries': typeof IndustriesRoute
   '/job-seekers': typeof JobSeekersRoute
   '/jobs': typeof JobsRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/terms': typeof TermsRoute
+  '/whs-commitment': typeof WhsCommitmentRoute
+  '/admin/jobs': typeof AdminJobsRoute
   '/jobs/$jobId': typeof JobsJobIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/apply': typeof ApplyRoute
+  '/candidate-privacy-notice': typeof CandidatePrivacyNoticeRoute
   '/contact': typeof ContactRoute
   '/employer-enquiry': typeof EmployerEnquiryRoute
   '/employers': typeof EmployersRoute
+  '/equal-opportunity': typeof EqualOpportunityRoute
   '/industries': typeof IndustriesRoute
   '/job-seekers': typeof JobSeekersRoute
   '/jobs': typeof JobsRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/terms': typeof TermsRoute
+  '/whs-commitment': typeof WhsCommitmentRoute
+  '/admin/jobs': typeof AdminJobsRoute
   '/jobs/$jobId': typeof JobsJobIdRoute
 }
 export interface FileRouteTypes {
@@ -131,62 +176,89 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/apply'
+    | '/candidate-privacy-notice'
     | '/contact'
     | '/employer-enquiry'
     | '/employers'
+    | '/equal-opportunity'
     | '/industries'
     | '/job-seekers'
     | '/jobs'
     | '/privacy'
     | '/register'
     | '/terms'
+    | '/whs-commitment'
+    | '/admin/jobs'
     | '/jobs/$jobId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/apply'
+    | '/candidate-privacy-notice'
     | '/contact'
     | '/employer-enquiry'
     | '/employers'
+    | '/equal-opportunity'
     | '/industries'
     | '/job-seekers'
     | '/jobs'
     | '/privacy'
     | '/register'
     | '/terms'
+    | '/whs-commitment'
+    | '/admin/jobs'
     | '/jobs/$jobId'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/apply'
+    | '/candidate-privacy-notice'
     | '/contact'
     | '/employer-enquiry'
     | '/employers'
+    | '/equal-opportunity'
     | '/industries'
     | '/job-seekers'
     | '/jobs'
     | '/privacy'
     | '/register'
     | '/terms'
+    | '/whs-commitment'
+    | '/admin/jobs'
     | '/jobs/$jobId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ApplyRoute: typeof ApplyRoute
+  CandidatePrivacyNoticeRoute: typeof CandidatePrivacyNoticeRoute
   ContactRoute: typeof ContactRoute
   EmployerEnquiryRoute: typeof EmployerEnquiryRoute
   EmployersRoute: typeof EmployersRoute
+  EqualOpportunityRoute: typeof EqualOpportunityRoute
   IndustriesRoute: typeof IndustriesRoute
   JobSeekersRoute: typeof JobSeekersRoute
   JobsRoute: typeof JobsRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
   TermsRoute: typeof TermsRoute
+  WhsCommitmentRoute: typeof WhsCommitmentRoute
+  AdminJobsRoute: typeof AdminJobsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/whs-commitment': {
+      id: '/whs-commitment'
+      path: '/whs-commitment'
+      fullPath: '/whs-commitment'
+      preLoaderRoute: typeof WhsCommitmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -229,6 +301,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndustriesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/equal-opportunity': {
+      id: '/equal-opportunity'
+      path: '/equal-opportunity'
+      fullPath: '/equal-opportunity'
+      preLoaderRoute: typeof EqualOpportunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/employers': {
       id: '/employers'
       path: '/employers'
@@ -248,6 +327,20 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/candidate-privacy-notice': {
+      id: '/candidate-privacy-notice'
+      path: '/candidate-privacy-notice'
+      fullPath: '/candidate-privacy-notice'
+      preLoaderRoute: typeof CandidatePrivacyNoticeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apply': {
+      id: '/apply'
+      path: '/apply'
+      fullPath: '/apply'
+      preLoaderRoute: typeof ApplyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -271,6 +364,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JobsJobIdRouteImport
       parentRoute: typeof JobsRoute
     }
+    '/admin/jobs': {
+      id: '/admin/jobs'
+      path: '/admin/jobs'
+      fullPath: '/admin/jobs'
+      preLoaderRoute: typeof AdminJobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -287,15 +387,20 @@ const JobsRouteWithChildren = JobsRoute._addFileChildren(JobsRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ApplyRoute: ApplyRoute,
+  CandidatePrivacyNoticeRoute: CandidatePrivacyNoticeRoute,
   ContactRoute: ContactRoute,
   EmployerEnquiryRoute: EmployerEnquiryRoute,
   EmployersRoute: EmployersRoute,
+  EqualOpportunityRoute: EqualOpportunityRoute,
   IndustriesRoute: IndustriesRoute,
   JobSeekersRoute: JobSeekersRoute,
   JobsRoute: JobsRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
   TermsRoute: TermsRoute,
+  WhsCommitmentRoute: WhsCommitmentRoute,
+  AdminJobsRoute: AdminJobsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

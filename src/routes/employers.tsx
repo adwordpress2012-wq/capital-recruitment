@@ -1,94 +1,150 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckCircle2, ArrowRight, ShieldCheck, HardHat, ClipboardCheck, Users } from "lucide-react";
-import heroImg from "@/assets/hero-workforce.jpg";
+import {
+  CheckCircle2,
+  ArrowRight,
+  ShieldCheck,
+  HardHat,
+  ClipboardCheck,
+  Users,
+} from "lucide-react";
+import { heroMain } from "@/lib/images";
+import { FORMSPREE_EMPLOYER_ACTION } from "@/lib/forms";
 import { Section } from "@/components/Section";
 
 export const Route = createFileRoute("/employers")({
   head: () => ({
     meta: [
-      { title: "Employers — Workforce Solutions | Capital Recruitment" },
-      { name: "description", content: "Workforce solutions built around your business. Labour hire, permanent recruitment, casual staffing and shutdown crews across Australia." },
-      { property: "og:title", content: "Workforce Solutions for Employers" },
-      { property: "og:description", content: "Reliable, compliant and scalable labour hire across Australia." },
+      {
+        title: "Employers — Workforce Solutions & Labour Hire Sydney | Capital Recruitment",
+      },
+      {
+        name: "description",
+        content:
+          "Employer workforce solutions across Greater Sydney — labour hire, temporary staffing, shutdown crews and permanent recruitment. Safety-led mobilisation from Liverpool NSW.",
+      },
+      {
+        name: "keywords",
+        content:
+          "employer workforce solutions, labour hire Sydney, industrial staffing, workforce solutions Australia, recruitment agency Liverpool NSW",
+      },
+      { property: "og:title", content: "Employer workforce solutions — Capital Recruitment" },
+      {
+        property: "og:description",
+        content: "Reliable labour hire and recruitment support for Australian operations.",
+      },
     ],
   }),
   component: EmployersPage,
 });
 
 const SERVICES = [
-  { t: "Labour Hire", d: "Flexible casual and ongoing labour for any volume." },
-  { t: "Permanent Recruitment", d: "Long-term hires sourced, screened and matched." },
-  { t: "Casual Staffing", d: "Coverage for peaks, leave and seasonal demand." },
-  { t: "Workforce Management", d: "End-to-end compliance, rostering and payroll." },
-  { t: "Shutdown Staffing", d: "Specialised crews mobilised for turnarounds." },
-  { t: "Project Staffing", d: "Scoped teams for the lifecycle of your project." },
+  {
+    t: "Labour hire",
+    d: "Structured sourcing for short spikes, ongoing rosters and specialist site requirements.",
+  },
+  {
+    t: "Permanent recruitment",
+    d: "Role scoping, competency verification and candidate care through offer and onboarding.",
+  },
+  {
+    t: "Casual staffing",
+    d: "Fast, compliant cover for demand peaks, leave and seasonal programmes.",
+  },
+  {
+    t: "Workforce coordination",
+    d: "Clear communication channels, documentation support and alignment to your site rules.",
+  },
+  {
+    t: "Shutdown staffing",
+    d: "Mobilisation planning for maintenance windows and turnaround schedules.",
+  },
+  {
+    t: "Project staffing",
+    d: "Volume hiring with consistent screening standards and induction readiness.",
+  },
 ];
 
 const SAFETY = [
-  "WHS compliance and safety inductions",
-  "Site-ready, PPE-equipped workers",
-  "Documented competency & licensing checks",
-  "Active risk management & incident reporting",
+  "WHS-aware recruitment and placement support",
+  "Site-ready workers with appropriate PPE expectations",
+  "Licence and competency checks aligned to role risk",
+  "Transparent escalation when issues arise on shift",
 ];
 
 function EmployersPage() {
   return (
     <>
       <section className="container-x pt-12 pb-6">
-        <div className="grid lg:grid-cols-2 gap-10 items-center">
+        <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
-            <div className="eyebrow mb-4">● For Employers</div>
-            <h1 className="text-4xl md:text-6xl font-bold leading-[1.05]">
-              Workforce solutions built around your <span className="text-gradient-lime italic">business needs</span>.
+            <div className="eyebrow mb-4">● For employers</div>
+            <h1 className="text-4xl font-bold leading-[1.05] md:text-6xl">
+              Workforce solutions aligned to your{" "}
+              <span className="text-gradient-lime italic">operational reality</span>.
             </h1>
             <p className="mt-6 text-lg text-muted-foreground">
-              We partner with businesses of all sizes to deliver skilled, reliable and flexible labour hire solutions.
+              Whether you are scaling a distribution centre, delivering a construction programme or
+              stabilising a manufacturing line, we provide recruitment and labour hire support that
+              respects your safety systems and productivity targets.
             </p>
             <ul className="mt-6 space-y-3">
-              {["Short & long-term labour hire", "Compliant, job-ready candidates", "Scalable workforce solutions"].map((t) => (
+              {[
+                "Recruitment support for blue-collar and industrial roles",
+                "Clear candidate summaries — skills, licences, availability and work history",
+                "A partner mindset — we advise early if requirements need adjusting",
+              ].map((t) => (
                 <li key={t} className="flex items-center gap-3 text-sm">
                   <CheckCircle2 className="size-5 text-[color:var(--lime-soft)]" /> {t}
                 </li>
               ))}
             </ul>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/contact" className="btn-primary">Request a callback <ArrowRight className="size-4" /></Link>
-              <Link to="/industries" className="btn-outline">Industries we serve</Link>
+              <Link to="/contact" className="btn-primary">
+                Request a call back <ArrowRight className="size-4" />
+              </Link>
+              <Link to="/industries" className="btn-outline">
+                Industries we support
+              </Link>
             </div>
           </div>
           <div className="relative">
             <div className="overflow-hidden rounded-[2rem] border shadow-[var(--shadow-elegant)]">
-              <img src={heroImg} alt="Employer and worker on site" className="w-full object-cover" />
+              <img
+                src={heroMain}
+                alt="Industrial employer workforce planning"
+                className="w-full object-cover"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      <Section eyebrow="Our Services" title="Tailored workforce solutions">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <Section eyebrow="Our services" title="Tailored workforce solutions">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s) => (
             <div key={s.t} className="card-soft">
-              <h3 className="text-lg font-bold mb-2">{s.t}</h3>
+              <h3 className="mb-2 text-lg font-bold">{s.t}</h3>
               <p className="text-sm text-muted-foreground">{s.d}</p>
             </div>
           ))}
         </div>
       </Section>
 
-      <Section eyebrow="Safety & Compliance" title="Site-ready people. Every shift.">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-          <div className="grid sm:grid-cols-2 gap-4">
+      <Section eyebrow="Safety & compliance" title="Site-ready people. Every shift.">
+        <div className="grid items-center gap-10 md:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             {[ShieldCheck, HardHat, ClipboardCheck, Users].map((Icon, i) => (
-              <div key={i} className="card-soft">
-                <Icon className="size-6 text-[color:var(--lime-soft)] mb-3" />
+              <div key={SAFETY[i]} className="card-soft">
+                <Icon className="mb-3 size-6 text-[color:var(--lime-soft)]" />
                 <p className="text-sm font-semibold">{SAFETY[i]}</p>
               </div>
             ))}
           </div>
           <div>
             <p className="text-muted-foreground">
-              Safety isn't a checkbox — it's the foundation of how we recruit, induct and place workers on your site.
-              Our compliance team ensures every worker is qualified, ticketed and PPE-ready before day one.
+              Safety is not a slogan — it is a recruitment filter. We ask the right questions,
+              verify the right tickets and set expectations before workers arrive on your site. When
+              requirements change, we work with you to keep placements compliant and sustainable.
             </p>
           </div>
         </div>
@@ -101,32 +157,100 @@ function EmployersPage() {
 }
 
 function EmployerForm() {
+  const action = FORMSPREE_EMPLOYER_ACTION;
+  const useFormspree = Boolean(action);
+
   return (
     <section className="container-x">
-      <div className="grad-cta rounded-[2rem] p-8 md:p-12 text-white grid lg:grid-cols-2 gap-10">
+      <div className="grid gap-10 rounded-[2rem] grad-cta p-8 text-white md:p-12 lg:grid-cols-2">
         <div>
-          <div className="eyebrow text-[color:var(--lime)] mb-3">● Get in touch</div>
-          <h2 className="text-3xl md:text-4xl font-bold">Tell us about your workforce needs.</h2>
-          <p className="mt-3 text-white/75">A consultant will respond within one business day.</p>
+          <div className="eyebrow mb-3 text-[color:var(--lime)]">● Employer enquiry</div>
+          <h2 className="text-3xl font-bold md:text-4xl">
+            Tell us about your workforce priorities.
+          </h2>
+          <p className="mt-3 text-white/75">
+            Share volumes, timelines and site requirements — a consultant will respond with
+            practical next steps.
+          </p>
+          {!useFormspree && (
+            <p className="mt-4 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white/90">
+              <strong>TODO:</strong> Set{" "}
+              <code className="rounded bg-black/20 px-1">VITE_FORMSPREE_EMPLOYER_ACTION</code> to
+              post this form to your team automatically.
+            </p>
+          )}
         </div>
-        <form className="bg-card rounded-2xl p-6 grid gap-4 text-foreground" onSubmit={(e) => e.preventDefault()}>
-          {[
-            { l: "Company name", t: "text" },
-            { l: "Contact person", t: "text" },
-            { l: "Email", t: "email" },
-            { l: "Phone", t: "tel" },
-          ].map((f) => (
-            <div key={f.l}>
-              <label className="text-xs font-semibold text-muted-foreground">{f.l}</label>
-              <input type={f.t} className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]" />
+        {useFormspree ? (
+          <form
+            className="grid gap-4 rounded-2xl bg-card p-6 text-foreground"
+            action={action}
+            method="POST"
+          >
+            <input
+              type="hidden"
+              name="_subject"
+              value="Employer enquiry — Capital Recruitment website"
+            />
+            {[
+              { l: "Company name", n: "company_name", t: "text" },
+              { l: "Contact person", n: "contact_person", t: "text" },
+              { l: "Email", n: "email", t: "email" },
+              { l: "Phone", n: "phone", t: "tel" },
+            ].map((f) => (
+              <div key={f.l}>
+                <label className="text-xs font-semibold text-muted-foreground">{f.l}</label>
+                <input
+                  name={f.n}
+                  type={f.t}
+                  required={f.t !== "tel"}
+                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
+                />
+              </div>
+            ))}
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground">Workforce needs</label>
+              <textarea
+                name="workforce_needs"
+                required
+                rows={3}
+                className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
+              />
             </div>
-          ))}
-          <div>
-            <label className="text-xs font-semibold text-muted-foreground">Workforce needs</label>
-            <textarea rows={3} className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]" />
-          </div>
-          <button className="btn-primary w-full">Submit enquiry <ArrowRight className="size-4" /></button>
-        </form>
+            <button type="submit" className="btn-primary w-full">
+              Submit enquiry <ArrowRight className="size-4" />
+            </button>
+          </form>
+        ) : (
+          <form
+            className="grid gap-4 rounded-2xl bg-card p-6 text-foreground"
+            onSubmit={(e) => e.preventDefault()}
+          >
+            {[
+              { l: "Company name", t: "text" },
+              { l: "Contact person", t: "text" },
+              { l: "Email", t: "email" },
+              { l: "Phone", t: "tel" },
+            ].map((f) => (
+              <div key={f.l}>
+                <label className="text-xs font-semibold text-muted-foreground">{f.l}</label>
+                <input
+                  type={f.t}
+                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
+                />
+              </div>
+            ))}
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground">Workforce needs</label>
+              <textarea
+                rows={3}
+                className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
+              />
+            </div>
+            <button type="submit" className="btn-primary w-full opacity-60" disabled>
+              Submit enquiry (configure Formspree) <ArrowRight className="size-4" />
+            </button>
+          </form>
+        )}
       </div>
     </section>
   );

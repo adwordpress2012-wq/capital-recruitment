@@ -22,7 +22,9 @@ function NotFoundComponent() {
         <p className="mt-2 text-sm text-muted-foreground">
           The page you're looking for doesn't exist or has been moved.
         </p>
-        <Link to="/" className="btn-primary mt-6">Go home</Link>
+        <Link to="/" className="btn-primary mt-6">
+          Go home
+        </Link>
       </div>
     </div>
   );
@@ -37,8 +39,18 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="text-xl font-semibold">This page didn't load</h1>
         <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button onClick={() => { router.invalidate(); reset(); }} className="btn-primary">Try again</button>
-          <a href="/" className="btn-outline">Go home</a>
+          <button
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
+            className="btn-primary"
+          >
+            Try again
+          </button>
+          <a href="/" className="btn-outline">
+            Go home
+          </a>
         </div>
       </div>
     </div>
@@ -50,9 +62,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Capital Recruitment Agency — Labour Hire & Workforce Solutions" },
-      { name: "description", content: "Trusted Australian labour hire and workforce solutions. Skilled, reliable and safety-focused workers across warehousing, construction, manufacturing and more." },
-      { property: "og:title", content: "Capital Recruitment Agency — Connecting People. Powering Success." },
+      { title: "Capital Recruitment Agency — Labour Hire Liverpool NSW & Sydney" },
+      {
+        name: "description",
+        content:
+          "Labour hire and recruitment agency based in Liverpool NSW. Workforce solutions Australia: warehousing recruitment, construction labour hire, security labour hire, industrial staffing and employer workforce solutions.",
+      },
+      {
+        name: "keywords",
+        content:
+          "labour hire Sydney, labour hire Liverpool NSW, recruitment agency Liverpool NSW, workforce solutions Australia, warehousing recruitment, construction labour hire, security labour hire, industrial staffing, candidate applications, employer workforce solutions",
+      },
+      {
+        property: "og:title",
+        content: "Capital Recruitment Agency — Connecting People. Powering Success.",
+      },
       { property: "og:description", content: "Premium workforce solutions across Australia." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
