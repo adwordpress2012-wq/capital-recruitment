@@ -84,8 +84,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         property: "og:image",
         content: `${SITE_PUBLIC_ORIGIN}/logo/capital-recruitment-full.png`,
       },
-      { property: "og:image:width", content: "581" },
-      { property: "og:image:height", content: "538" },
+      { property: "og:image:width", content: "1024" },
+      { property: "og:image:height", content: "608" },
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:image",

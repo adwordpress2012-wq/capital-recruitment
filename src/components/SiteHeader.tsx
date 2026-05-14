@@ -30,9 +30,9 @@ export function SiteHeader() {
         scrolled ? "backdrop-blur-md bg-background/80 border-b" : "bg-background"
       }`}
     >
-      <div className="container-x flex h-18 items-center justify-between py-4">
-        <Link to="/" className="shrink-0">
-          <Logo />
+      <div className="container-x flex min-h-[4.5rem] items-center justify-between gap-3 py-2 sm:py-3">
+        <Link to="/" className="flex shrink-0 items-center self-center">
+          <Logo placement="navbar" />
         </Link>
         <nav className="hidden lg:flex items-center gap-1">
           {NAV.map((n) => (
@@ -68,10 +68,10 @@ export function SiteHeader() {
             <Link
               to="/"
               onClick={() => setOpen(false)}
-              className="px-3 py-2"
+              className="flex items-center px-3 py-2"
               aria-label="Capital Recruitment home"
             >
-              <Logo />
+              <Logo placement="navbar" />
             </Link>
             {NAV.map((n) => (
               <Link
