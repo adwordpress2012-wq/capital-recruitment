@@ -36,6 +36,12 @@ export function readCapitalServerEnv(): CapitalServerEnv {
   };
 }
 
+/** True when the anon client can be used for public reads (URL + anon key only). */
+export function isSupabasePublicConfigured(env: CapitalServerEnv): boolean {
+  return Boolean(env.supabaseUrl && env.supabaseAnonKey);
+}
+
+/** True when all three Supabase vars are present (required for writes and admin reads). */
 export function isSupabaseBackendConfigured(env: CapitalServerEnv): boolean {
   return Boolean(env.supabaseUrl && env.supabaseAnonKey && env.supabaseServiceRoleKey);
 }

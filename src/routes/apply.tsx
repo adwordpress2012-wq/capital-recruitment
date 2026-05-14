@@ -176,7 +176,7 @@ function ApplyPage() {
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-muted-foreground">
-                    Resume (PDF, DOC, or DOCX — max 5MB)
+                    Resume (PDF, DOC, or DOCX — max 4 MB)
                   </label>
                   <input
                     name="resume"
