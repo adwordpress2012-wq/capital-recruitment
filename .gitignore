@@ -1,3 +1,11 @@
+# Secrets and local env (never commit real values)
+.env
+.env.local
+.env.*.local
+.env*.local
+*.pem
+*.key
+
 # Logs
 logs
 *.log
@@ -39,4 +47,3 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
-.env*.local
