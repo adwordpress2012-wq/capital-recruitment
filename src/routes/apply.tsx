@@ -85,7 +85,7 @@ function ApplyPage() {
       setDone(true);
       form.reset();
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError("We could not submit your application. Please try again.");
     } finally {
       setPending(false);
     }
@@ -112,7 +112,7 @@ function ApplyPage() {
             {done ? (
               <div className="card-soft grid gap-4">
                 <div className="inline-flex items-center gap-2 text-lg font-bold text-[color:var(--teal-deep)]">
-                  <CheckCircle2 className="size-6 text-[color:var(--lime-soft)]" /> Application received
+                  <CheckCircle2 className="size-6 text-[color:var(--lime-soft)]" /> Application received.
                 </div>
                 <p className="text-sm text-muted-foreground">
                   Thank you — our team will review your details and resume. We will contact you using

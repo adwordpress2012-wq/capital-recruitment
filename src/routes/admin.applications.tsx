@@ -73,11 +73,13 @@ function AdminApplicationsPage() {
       <Section className="!py-8">
         {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
         <div className="overflow-x-auto rounded-2xl border bg-card">
-          <table className="w-full min-w-[800px] text-sm">
+          <table className="w-full min-w-[960px] text-sm">
             <thead className="bg-muted/50 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               <tr>
                 <th className="px-4 py-3">Applicant</th>
                 <th className="px-4 py-3">Job</th>
+                <th className="px-4 py-3">Location</th>
+                <th className="px-4 py-3">Message</th>
                 <th className="px-4 py-3">Phone</th>
                 <th className="px-4 py-3">Email</th>
                 <th className="px-4 py-3">Resume</th>
@@ -87,7 +89,7 @@ function AdminApplicationsPage() {
             <tbody>
               {rows.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
+                  <td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">
                     No applications yet.
                   </td>
                 </tr>
@@ -96,6 +98,15 @@ function AdminApplicationsPage() {
                 <tr key={r.id} className="border-t">
                   <td className="px-4 py-3 font-medium">{r.applicant_name}</td>
                   <td className="px-4 py-3 text-muted-foreground">{r.job_title ?? "—"}</td>
+                  <td className="px-4 py-3 text-muted-foreground max-w-[140px] truncate" title={r.location ?? ""}>
+                    {r.location ?? "—"}
+                  </td>
+                  <td
+                    className="px-4 py-3 text-muted-foreground max-w-[220px] truncate"
+                    title={r.message_preview ?? ""}
+                  >
+                    {r.message_preview ?? "—"}
+                  </td>
                   <td className="px-4 py-3 text-muted-foreground">{r.phone}</td>
                   <td className="px-4 py-3">
                     <a className="underline-offset-2 hover:underline" href={`mailto:${r.email}`}>

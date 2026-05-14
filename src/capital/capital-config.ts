@@ -1,15 +1,17 @@
-/** Server-side Supabase + admin auth env (read only inside server function handlers). */
-
-let capitalBackendStatusLogged = false;
-
-function logCapitalBackendStatusOnce(env: CapitalServerEnv) {
-  if (capitalBackendStatusLogged) return;
-  capitalBackendStatusLogged = true;
-  if (process.env.NODE_ENV !== "production") return;
-  const backendConfigured = isSupabaseBackendConfigured(env);
-  const serviceRolePresent = Boolean(env.supabaseServiceRoleKey?.trim());
-  console.info("[capital]", JSON.stringify({ backendConfigured, serviceRolePresent }));
-}
+/**
+ * Server-only Supabase and admin configuration (read inside TanStack Start server function handlers).
+ *
+ * **Client vs server env**
+ * - `VITE_*` vars are embedded in the browser bundle by Vite; use them only for the public Supabase URL and anon key.
+ * - `SUPABASE_SERVICE_ROLE_KEY`, `CAPITAL_ADMIN_PASSWORD`, and `CAPITAL_ADMIN_SESSION_SECRET` must never use a `VITE_` prefix
+ *   so they stay server-only on Vercel and local dev.
+ *
+ * **Fallback URL/key names**
+ * - `readCapitalServerEnv` accepts several env names so deployments can align with other DOS stacks (`SUPABASE_URL`, etc.).
+ *
+ * **Service role**
+ * - `SUPABASE_SERVICE_ROLE_KEY` is only read here for server functions in `capital-fns.ts` (writes, storage, admin reads).
+ */
 
 export type CapitalServerEnv = {
   supabaseUrl: string;
@@ -38,15 +40,13 @@ export function readCapitalServerEnv(): CapitalServerEnv {
   const adminSessionSecret =
     process.env.CAPITAL_ADMIN_SESSION_SECRET || process.env.SUPABASE_JWT_SECRET || "";
 
-  const env: CapitalServerEnv = {
+  return {
     supabaseUrl,
     supabaseAnonKey,
     supabaseServiceRoleKey,
     adminPassword,
     adminSessionSecret,
   };
-  logCapitalBackendStatusOnce(env);
-  return env;
 }
 
 export function isSupabaseBackendConfigured(env: CapitalServerEnv): boolean {

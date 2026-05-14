@@ -1,3 +1,22 @@
+/**
+ * Recruitment portal server functions (TanStack Start `createServerFn`).
+ *
+ * **Public vs admin**
+ * - Public job listing uses the **anon** Supabase client: RLS allows `select` only where `capital_jobs.status = 'live'`.
+ * - Admin job CRUD, application intake, contact, and employer inserts use the **service role** client (bypasses RLS).
+ *   The service role key is read from `readCapitalServerEnv()` and must never be sent to the browser.
+ *
+ * **Resume storage**
+ * - `submitApplicationFn` uploads bytes to private bucket `capital-resumes` via service role, then inserts `candidate_applications.resume_path`.
+ * - If the DB insert fails, the uploaded object is removed to avoid orphans.
+ *
+ * **Signed URLs**
+ * - `adminListApplicationsFn` calls `createSignedUrl` so admins can download resumes without making the bucket public.
+ *
+ * **Admin auth**
+ * - `adminLoginFn` compares `CAPITAL_ADMIN_PASSWORD` with `timingSafeEqual`; other admin handlers require `verifyAdminSessionToken`.
+ */
+
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { timingSafeEqual } from "node:crypto";
@@ -203,6 +222,8 @@ export type AdminApplicationRow = {
   id: string;
   applicant_name: string;
   job_title: string | null;
+  location: string | null;
+  message_preview: string | null;
   phone: string;
   email: string;
   resume_signed_url: string | null;
@@ -234,6 +255,9 @@ export const adminListApplicationsFn = createServerFn({ method: "POST" })
     for (const r of list) {
       const applicantName = String(r.full_name ?? r.applicant_name ?? "");
       const resumeKey = String(r.resume_path ?? r.resume_storage_path ?? "");
+      const rawMessage = String(r.message ?? "").trim();
+      const messagePreview =
+        rawMessage.length > 160 ? `${rawMessage.slice(0, 157)}…` : rawMessage || null;
       let resumeSigned: string | null = null;
       if (resumeKey) {
         const signed = await sb.storage.from(RESUME_BUCKET).createSignedUrl(resumeKey, 3600);
@@ -243,6 +267,8 @@ export const adminListApplicationsFn = createServerFn({ method: "POST" })
         id: String(r.id),
         applicant_name: applicantName,
         job_title: r.job_id ? titleById[String(r.job_id)] ?? String(r.job_id) : null,
+        location: r.location != null && String(r.location).trim() !== "" ? String(r.location) : null,
+        message_preview: messagePreview,
         phone: String(r.phone ?? ""),
         email: String(r.email ?? ""),
         resume_signed_url: resumeSigned,
@@ -270,7 +296,7 @@ export const submitApplicationFn = createServerFn({ method: "POST" })
     const messageTrimmed = String(form.get("message") ?? "").trim();
     const file = form.get("resume");
 
-    if (!jobId || !fullName || !email || !phone || !messageTrimmed) {
+    if (!fullName || !email || !phone || !messageTrimmed) {
       return { ok: false as const, error: "Please fill in all required fields." };
     }
     if (!(file instanceof File) || file.size === 0) {
@@ -284,21 +310,23 @@ export const submitApplicationFn = createServerFn({ method: "POST" })
     if (!ext) return { ok: false as const, error: "Resume must be PDF, DOC, or DOCX." };
 
     const sb = serviceClient();
-    const { data: job, error: jobErr } = await sb
-      .from("capital_jobs")
-      .select("id")
-      .eq("id", jobId)
-      .eq("status", "live")
-      .maybeSingle();
-    if (jobErr) {
-      logCapital("capital_jobs.select(apply verify live)", jobErr);
-      return {
-        ok: false as const,
-        error: `Could not verify job: ${formatSupabaseWriteError(jobErr)}`,
-      };
-    }
-    if (!job) {
-      return { ok: false as const, error: "This job is not open for applications." };
+    if (jobId) {
+      const { data: job, error: jobErr } = await sb
+        .from("capital_jobs")
+        .select("id")
+        .eq("id", jobId)
+        .eq("status", "live")
+        .maybeSingle();
+      if (jobErr) {
+        logCapital("capital_jobs.select(apply verify live)", jobErr);
+        return {
+          ok: false as const,
+          error: `Could not verify job: ${formatSupabaseWriteError(jobErr)}`,
+        };
+      }
+      if (!job) {
+        return { ok: false as const, error: "This job is not open for applications." };
+      }
     }
 
     const { randomUUID } = await import("node:crypto");
@@ -318,7 +346,7 @@ export const submitApplicationFn = createServerFn({ method: "POST" })
     }
 
     const insertRow = {
-      job_id: jobId,
+      job_id: jobId || null,
       full_name: fullName,
       email,
       phone,

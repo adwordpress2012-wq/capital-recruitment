@@ -1,5 +1,6 @@
--- Align candidate_applications with production column names (safe if already migrated).
--- Legacy repo columns: applicant_name, resume_storage_path, message NOT NULL
+-- DOS recruitment template — idempotent alignment for older forks / manual DB edits.
+-- Renames legacy columns if present; safe to re-run. Greenfield installs can rely on
+-- 20250514100000_capital_backend.sql only; this file stays for migration history continuity.
 
 alter table public.candidate_applications add column if not exists location text;
 

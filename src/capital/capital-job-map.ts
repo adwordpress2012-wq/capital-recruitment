@@ -1,3 +1,11 @@
+/**
+ * Maps Postgres `capital_jobs` rows ↔ in-app `Job` types (`src/data/jobs.ts`).
+ *
+ * - DB uses lowercase `status` (`draft` | `live` | `closed`) and snake_case columns (`employment_type`, `posted_label`).
+ * - UI uses Title Case `JobStatus` and camel-ish field names (`type`, `posted`).
+ * - `description` / `requirements` are JSONB; `normalizeJobStringList` tolerates legacy string or JSON shapes.
+ */
+
 import type { EmploymentType, Job, JobStatus } from "@/data/jobs";
 
 /** Normalise list fields for JSONB columns (arrays, or legacy JSON/string values). */

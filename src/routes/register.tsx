@@ -4,7 +4,10 @@ import { Upload, ArrowRight, CheckCircle2, FileText } from "lucide-react";
 import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
 import { INDUSTRY_LABELS } from "@/data/industries";
-import { FORMSPREE_CANDIDATE_ACTION, FORMSPREE_CANDIDATE_FILE_UPLOAD_ENABLED } from "@/lib/forms";
+import { getBrowserSupabaseConfig } from "@/lib/capital-env";
+import { EMAIL_PAUL } from "@/lib/site";
+import { submitApplicationFn } from "@/capital/capital-fns";
+
 export const Route = createFileRoute("/register")({
   validateSearch: (search: Record<string, unknown>) => ({
     role: typeof search.role === "string" ? search.role : "",
@@ -38,12 +41,61 @@ function RegisterPage() {
   const { role: roleFromUrl } = Route.useSearch();
   const [file, setFile] = useState<File | null>(null);
   const [drag, setDrag] = useState(false);
-
-  const action = FORMSPREE_CANDIDATE_ACTION;
-  const useFormspree = Boolean(action);
-  const resumeUploadViaFormspree = FORMSPREE_CANDIDATE_FILE_UPLOAD_ENABLED;
+  const useSupabase = Boolean(getBrowserSupabaseConfig());
+  const [pending, setPending] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const defaultRole = useMemo(() => roleFromUrl || "", [roleFromUrl]);
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!useSupabase) return;
+    setError(null);
+    setPending(true);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const baseMessage = String(fd.get("message") ?? "").trim();
+    const role = String(fd.get("role_applying_for") ?? "").trim();
+    const industry = String(fd.get("preferred_industry") ?? "").trim();
+    const workRights = String(fd.get("work_rights") ?? "").trim();
+    const availability = String(fd.get("availability") ?? "").trim();
+    const tickets = String(fd.get("tickets_licences") ?? "").trim();
+    const extra = [
+      "— Application details —",
+      role && `Role applying for: ${role}`,
+      industry && `Preferred industry: ${industry}`,
+      workRights && `Work rights: ${workRights}`,
+      availability && `Availability: ${availability}`,
+      tickets && `Tickets & licences: ${tickets}`,
+    ]
+      .filter(Boolean)
+      .join("\n");
+    const composed = extra ? `${baseMessage}\n\n${extra}` : baseMessage;
+    fd.set("message", composed);
+    const resumeFromInput = form.querySelector<HTMLInputElement>('input[name="resume"]')?.files?.[0];
+    const resumeFile = resumeFromInput && resumeFromInput.size > 0 ? resumeFromInput : file;
+    if (!resumeFile || resumeFile.size === 0) {
+      setError("Please attach your resume.");
+      setPending(false);
+      return;
+    }
+    fd.set("resume", resumeFile, resumeFile.name);
+    try {
+      const res = await submitApplicationFn({ data: fd });
+      if (!res.ok) {
+        setError(res.error);
+        return;
+      }
+      setDone(true);
+      setFile(null);
+      form.reset();
+    } catch {
+      setError("We could not submit your application. Please try again.");
+    } finally {
+      setPending(false);
+    }
+  };
 
   return (
     <>
@@ -57,26 +109,54 @@ function RegisterPage() {
             Tell us about your experience, work rights and availability. Applications and resumes
             are reviewed by our consultants. We will contact you using the details you provide.
           </p>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Applying for a specific advertised role?{" "}
+            <Link to="/jobs" className="font-semibold text-foreground underline-offset-2 hover:underline">
+              Browse jobs
+            </Link>{" "}
+            and use Apply on the listing so your application is linked to that vacancy.
+          </p>
         </div>
       </section>
 
       <Section className="!py-12">
         <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
           <Reveal>
-            {useFormspree ? (
+            {!useSupabase ? (
+              <div className="card-soft grid gap-4">
+                <p className="text-sm text-muted-foreground">
+                  Online registration is unavailable until the site database is configured. Please
+                  email{" "}
+                  <a className="font-semibold underline-offset-2 hover:underline" href={`mailto:${EMAIL_PAUL}`}>
+                    {EMAIL_PAUL}
+                  </a>{" "}
+                  with your resume, or{" "}
+                  <Link to="/jobs" className="font-semibold underline-offset-2 hover:underline">
+                    browse open roles
+                  </Link>{" "}
+                  when the site is fully connected.
+                </p>
+              </div>
+            ) : done ? (
+              <div className="card-soft grid gap-4">
+                <div className="inline-flex items-center gap-2 text-lg font-bold text-[color:var(--teal-deep)]">
+                  <CheckCircle2 className="size-6 text-[color:var(--lime-soft)]" /> Application received.
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Thank you — our team will review your details and resume. We will contact you using
+                  the email or phone number you provided.
+                </p>
+                <Link to="/jobs" className="btn-outline w-fit">
+                  Browse jobs
+                </Link>
+              </div>
+            ) : (
               <form
-                key={`candidate-fs-${defaultRole}`}
+                key={`candidate-reg-${defaultRole}`}
                 className="card-soft grid gap-5"
-                action={action}
-                method="POST"
-                encType={resumeUploadViaFormspree ? "multipart/form-data" : undefined}
+                onSubmit={(e) => void onSubmit(e)}
               >
-                <input
-                  type="hidden"
-                  name="_subject"
-                  value="Candidate application — Capital Recruitment website"
-                />
-
+                <input type="hidden" name="job_id" value="" />
                 <div className="grid gap-4 sm:grid-cols-2">
                   <NativeField label="Full name" name="full_name" type="text" required />
                   <NativeField label="Email" name="email" type="email" required />
@@ -115,9 +195,7 @@ function RegisterPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-muted-foreground">
-                      Work rights
-                    </label>
+                    <label className="text-xs font-semibold text-muted-foreground">Work rights</label>
                     <select
                       name="work_rights"
                       className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
@@ -141,9 +219,7 @@ function RegisterPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-muted-foreground">
-                      Availability
-                    </label>
+                    <label className="text-xs font-semibold text-muted-foreground">Availability</label>
                     <select
                       name="availability"
                       className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
@@ -190,28 +266,52 @@ function RegisterPage() {
                 </div>
 
                 <div>
-                  {!resumeUploadViaFormspree && (
-                    <p className="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-sm text-amber-950">
-                      Resume upload will be enabled shortly. For now, please email your resume to
-                      paul@capitalrecruitment.com.au.
-                    </p>
-                  )}
                   <label className="text-xs font-semibold text-muted-foreground">
-                    Resume (PDF or Word)
+                    Resume (PDF, DOC, or DOCX — max 5MB)
                   </label>
-                  <input
-                    type="file"
-                    {...(resumeUploadViaFormspree
-                      ? { name: "attachment", required: true }
-                      : { required: false })}
-                    accept=".pdf,.doc,.docx"
-                    className="mt-2 block w-full text-sm"
-                  />
+                  <label
+                    onDragOver={(ev) => {
+                      ev.preventDefault();
+                      setDrag(true);
+                    }}
+                    onDragLeave={() => setDrag(false)}
+                    onDrop={(ev) => {
+                      ev.preventDefault();
+                      setDrag(false);
+                      const f = ev.dataTransfer.files?.[0];
+                      if (f) setFile(f);
+                    }}
+                    className={`mt-2 block cursor-pointer rounded-xl border border-dashed px-4 py-8 text-center transition ${drag ? "border-[color:var(--lime-soft)] bg-[color:var(--surface)]" : "hover:bg-[color:var(--surface)]"}`}
+                  >
+                    {file ? (
+                      <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
+                        <FileText className="size-5 text-[color:var(--lime-soft)]" />
+                        <span className="font-semibold">{file.name}</span>
+                        <span className="text-muted-foreground">
+                          ({Math.round(file.size / 1024)} KB)
+                        </span>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload className="mx-auto mb-2 size-6 text-[color:var(--lime-soft)]" />
+                        <div className="text-sm font-semibold">Drag &amp; drop your resume here</div>
+                        <div className="mt-1 text-xs text-muted-foreground">
+                          or click to browse — PDF, DOC, DOCX (max 5MB)
+                        </div>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      name="resume"
+                      accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      className="hidden"
+                      onChange={(ev) => setFile(ev.target.files?.[0] ?? null)}
+                    />
+                  </label>
                 </div>
 
                 <label className="flex items-start gap-2 text-xs text-muted-foreground">
-                  <input type="checkbox" name="consent" required className="mt-0.5" />I have read
-                  the{" "}
+                  <input type="checkbox" name="consent" required className="mt-0.5" />I have read the{" "}
                   <Link to="/privacy" className="underline">
                     Privacy Policy
                   </Link>
@@ -226,110 +326,8 @@ function RegisterPage() {
                   .
                 </label>
 
-                <button type="submit" className="btn-primary justify-center">
-                  Submit application <ArrowRight className="size-4" />
-                </button>
-              </form>
-            ) : (
-              <form
-                key={`candidate-local-${defaultRole}`}
-                className="card-soft grid gap-5"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                }}
-              >
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Full name" />
-                  <Field label="Email" type="email" />
-                  <Field label="Phone" type="tel" />
-                  <Field label="Location (suburb / city)" />
-                  <Field label="Role applying for" defaultValue={defaultRole} />
-                  <SelectField label="Preferred industry" options={[...INDUSTRY_LABELS]} />
-                  <SelectField
-                    label="Work rights"
-                    options={[
-                      "Australian citizen",
-                      "Permanent resident",
-                      "Valid work visa",
-                      "Seeking sponsorship",
-                      "Other",
-                    ]}
-                  />
-                  <SelectField
-                    label="Availability"
-                    options={[
-                      "Immediately",
-                      "Within 1 week",
-                      "Within 2–4 weeks",
-                      "Casual / on-call only",
-                    ]}
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-muted-foreground">
-                    Tickets &amp; licences (optional)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. White Card, LF, RSA, security licence"
-                    className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-muted-foreground">Message</label>
-                  <textarea
-                    rows={4}
-                    className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-muted-foreground">Resume</label>
-                  <label
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      setDrag(true);
-                    }}
-                    onDragLeave={() => setDrag(false)}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      setDrag(false);
-                      const f = e.dataTransfer.files?.[0];
-                      if (f) setFile(f);
-                    }}
-                    className={`mt-1 block cursor-pointer rounded-xl border border-dashed px-4 py-8 text-center transition ${drag ? "border-[color:var(--lime-soft)] bg-[color:var(--surface)]" : "hover:bg-[color:var(--surface)]"}`}
-                  >
-                    {file ? (
-                      <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
-                        <FileText className="size-5 text-[color:var(--lime-soft)]" />
-                        <span className="font-semibold">{file.name}</span>
-                        <span className="text-muted-foreground">
-                          ({Math.round(file.size / 1024)} KB)
-                        </span>
-                      </div>
-                    ) : (
-                      <>
-                        <Upload className="mx-auto mb-2 size-6 text-[color:var(--lime-soft)]" />
-                        <div className="text-sm font-semibold">
-                          Drag &amp; drop your resume here
-                        </div>
-                        <div className="mt-1 text-xs text-muted-foreground">
-                          or click to browse — PDF, DOC, DOCX (max 5MB)
-                        </div>
-                      </>
-                    )}
-                    <input
-                      type="file"
-                      accept=".pdf,.doc,.docx"
-                      className="hidden"
-                      onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                    />
-                  </label>
-                </div>
-                <label className="flex items-start gap-2 text-xs text-muted-foreground">
-                  <input type="checkbox" className="mt-0.5" />I agree to the Privacy Policy and
-                  Terms &amp; Conditions.
-                </label>
-                <button type="submit" className="btn-primary justify-center opacity-60" disabled>
+                {error && <p className="text-sm text-red-600">{error}</p>}
+                <button type="submit" className="btn-primary justify-center" disabled={pending}>
                   Submit application <ArrowRight className="size-4" />
                 </button>
               </form>
@@ -382,41 +380,6 @@ function NativeField({
         defaultValue={defaultValue}
         className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
       />
-    </div>
-  );
-}
-
-function Field({
-  label,
-  type = "text",
-  defaultValue,
-}: {
-  label: string;
-  type?: string;
-  defaultValue?: string;
-}) {
-  return (
-    <div>
-      <label className="text-xs font-semibold text-muted-foreground">{label}</label>
-      <input
-        type={type}
-        defaultValue={defaultValue}
-        className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-      />
-    </div>
-  );
-}
-
-function SelectField({ label, options }: { label: string; options: string[] }) {
-  return (
-    <div>
-      <label className="text-xs font-semibold text-muted-foreground">{label}</label>
-      <select className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]">
-        <option value="">Select…</option>
-        {options.map((o) => (
-          <option key={o}>{o}</option>
-        ))}
-      </select>
     </div>
   );
 }

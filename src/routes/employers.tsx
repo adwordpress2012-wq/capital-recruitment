@@ -8,7 +8,6 @@ import {
   Users,
 } from "lucide-react";
 import { heroMain } from "@/lib/images";
-import { FORMSPREE_EMPLOYER_ACTION } from "@/lib/forms";
 import { Section } from "@/components/Section";
 
 export const Route = createFileRoute("/employers")({
@@ -157,9 +156,6 @@ function EmployersPage() {
 }
 
 function EmployerForm() {
-  const action = FORMSPREE_EMPLOYER_ACTION;
-  const useFormspree = Boolean(action);
-
   return (
     <section className="container-x">
       <div className="grid gap-10 rounded-[2rem] grad-cta p-8 text-white md:p-12 lg:grid-cols-2">
@@ -173,77 +169,15 @@ function EmployerForm() {
             practical next steps.
           </p>
         </div>
-        {useFormspree ? (
-          <form
-            className="grid gap-4 rounded-2xl bg-card p-6 text-foreground"
-            action={action}
-            method="POST"
-          >
-            <input
-              type="hidden"
-              name="_subject"
-              value="Employer enquiry — Capital Recruitment website"
-            />
-            {[
-              { l: "Company name", n: "company_name", t: "text" },
-              { l: "Contact person", n: "contact_person", t: "text" },
-              { l: "Email", n: "email", t: "email" },
-              { l: "Phone", n: "phone", t: "tel" },
-            ].map((f) => (
-              <div key={f.l}>
-                <label className="text-xs font-semibold text-muted-foreground">{f.l}</label>
-                <input
-                  name={f.n}
-                  type={f.t}
-                  required={f.t !== "tel"}
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-            ))}
-            <div>
-              <label className="text-xs font-semibold text-muted-foreground">Workforce needs</label>
-              <textarea
-                name="workforce_needs"
-                required
-                rows={3}
-                className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-              />
-            </div>
-            <button type="submit" className="btn-primary w-full">
-              Submit enquiry <ArrowRight className="size-4" />
-            </button>
-          </form>
-        ) : (
-          <form
-            className="grid gap-4 rounded-2xl bg-card p-6 text-foreground"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            {[
-              { l: "Company name", t: "text" },
-              { l: "Contact person", t: "text" },
-              { l: "Email", t: "email" },
-              { l: "Phone", t: "tel" },
-            ].map((f) => (
-              <div key={f.l}>
-                <label className="text-xs font-semibold text-muted-foreground">{f.l}</label>
-                <input
-                  type={f.t}
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-            ))}
-            <div>
-              <label className="text-xs font-semibold text-muted-foreground">Workforce needs</label>
-              <textarea
-                rows={3}
-                className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-              />
-            </div>
-            <button type="submit" className="btn-primary w-full opacity-60" disabled>
-              Submit enquiry <ArrowRight className="size-4" />
-            </button>
-          </form>
-        )}
+        <div className="flex flex-col justify-center gap-4 rounded-2xl bg-card p-6 text-foreground">
+          <p className="text-sm text-muted-foreground">
+            Use the full employer enquiry form to capture site context, services and mobilisation
+            timing. It only takes a few minutes.
+          </p>
+          <Link to="/employer-enquiry" className="btn-primary w-full justify-center">
+            Start employer enquiry <ArrowRight className="size-4" />
+          </Link>
+        </div>
       </div>
     </section>
   );

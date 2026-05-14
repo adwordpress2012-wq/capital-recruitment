@@ -1,5 +1,8 @@
--- Capital Recruitment: core tables, RLS, and storage bucket.
--- Run via Supabase SQL editor or `supabase db push` after linking the project.
+-- DOS recruitment portal template — core tables, RLS, and private resume storage.
+-- Apply with Supabase SQL editor or `supabase db push` after `supabase link`.
+--
+-- Objects: capital_jobs, candidate_applications, employer_enquiries, contact_messages,
+--           storage bucket capital-resumes (private, 5MB, PDF/DOC/DOCX).
 
 -- ---------------------------------------------------------------------------
 -- Tables
