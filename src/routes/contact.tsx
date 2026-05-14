@@ -10,8 +10,6 @@ import {
   MAP_EMBED_QUERY,
   SITE_PHONE,
 } from "@/lib/site";
-import { FORMSPREE_CONTACT_ACTION } from "@/lib/forms";
-import { getBrowserSupabaseConfig } from "@/lib/capital-env";
 import { submitContactMessageFn } from "@/capital/capital-fns";
 
 export const Route = createFileRoute("/contact")({
@@ -41,14 +39,11 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
-  const action = FORMSPREE_CONTACT_ACTION;
-  const useFormspree = Boolean(action);
-  const useSupabase = Boolean(getBrowserSupabaseConfig());
   const [done, setDone] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
-  const onSubmitSupabase = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErr(null);
     setPending(true);
@@ -136,163 +131,80 @@ function ContactPage() {
         {SITE_PHONE ? (
           <div className="mt-6 rounded-2xl border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
             <span className="font-semibold text-foreground">Phone:</span>{" "}
-            <a className="underline-offset-2 hover:underline" href={`tel:${SITE_PHONE.replace(/\s/g, "")}`}>
+            <a
+              className="underline-offset-2 hover:underline"
+              href={`tel:${SITE_PHONE.replace(/\s/g, "")}`}
+            >
               {SITE_PHONE}
             </a>
           </div>
         ) : null}
 
         <div className="mt-10 grid gap-8 lg:grid-cols-2">
-          {useSupabase ? (
-            <form className="card-soft grid gap-4" onSubmit={(e) => void onSubmitSupabase(e)}>
-              <h2 className="text-2xl font-bold">Quick enquiry</h2>
-              {done && (
-                <p className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-950">
-                  Thanks — your message has been sent. We will be in touch shortly.
-                </p>
-              )}
-              {err && (
-                <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900">
-                  {err}
-                </p>
-              )}
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">Full name</label>
-                <input
-                  name="full_name"
-                  required
-                  type="text"
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">Email</label>
-                <input
-                  name="email"
-                  required
-                  type="email"
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">Phone</label>
-                <input
-                  name="phone"
-                  type="tel"
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">
-                  Company (optional)
-                </label>
-                <input
-                  name="company"
-                  type="text"
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">
-                  How can we help?
-                </label>
-                <textarea
-                  name="message"
-                  required
-                  rows={4}
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-              <button type="submit" className="btn-primary" disabled={pending}>
-                Send message <ArrowRight className="size-4" />
-              </button>
-            </form>
-          ) : useFormspree ? (
-            <form className="card-soft grid gap-4" action={action} method="POST">
-              <input type="hidden" name="_subject" value="Website enquiry — Capital Recruitment" />
-              <h2 className="text-2xl font-bold">Quick enquiry</h2>
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">Full name</label>
-                <input
-                  name="full_name"
-                  required
-                  type="text"
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">Email</label>
-                <input
-                  name="email"
-                  required
-                  type="email"
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">Phone</label>
-                <input
-                  name="phone"
-                  type="tel"
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">
-                  Company (optional)
-                </label>
-                <input
-                  name="company"
-                  type="text"
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">
-                  How can we help?
-                </label>
-                <textarea
-                  name="message"
-                  required
-                  rows={4}
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-              <button type="submit" className="btn-primary">
-                Send message <ArrowRight className="size-4" />
-              </button>
-            </form>
-          ) : (
-            <form className="card-soft grid gap-4" onSubmit={(e) => e.preventDefault()}>
-              <h2 className="text-2xl font-bold">Quick enquiry</h2>
-              {[
-                ["Full name", "text"],
-                ["Email address", "email"],
-                ["Phone number", "tel"],
-                ["Company (optional)", "text"],
-              ].map(([l, t]) => (
-                <div key={l}>
-                  <label className="text-xs font-semibold text-muted-foreground">{l}</label>
-                  <input
-                    type={t}
-                    className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                  />
-                </div>
-              ))}
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground">
-                  How can we help?
-                </label>
-                <textarea
-                  rows={4}
-                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
-                />
-              </div>
-              <button type="submit" className="btn-primary opacity-60" disabled>
-                Send message <ArrowRight className="size-4" />
-              </button>
-            </form>
-          )}
+          <form className="card-soft grid gap-4" onSubmit={(e) => void onSubmit(e)}>
+            <h2 className="text-2xl font-bold">Quick enquiry</h2>
+            {done && (
+              <p className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-950">
+                Thanks — your message has been sent. We will be in touch shortly.
+              </p>
+            )}
+            {err && (
+              <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900">
+                {err}
+              </p>
+            )}
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground">Full name</label>
+              <input
+                name="full_name"
+                required
+                type="text"
+                className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground">Email</label>
+              <input
+                name="email"
+                required
+                type="email"
+                className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground">Phone</label>
+              <input
+                name="phone"
+                type="tel"
+                className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground">
+                Company (optional)
+              </label>
+              <input
+                name="company"
+                type="text"
+                className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground">
+                How can we help?
+              </label>
+              <textarea
+                name="message"
+                required
+                rows={4}
+                className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
+              />
+            </div>
+            <button type="submit" className="btn-primary" disabled={pending}>
+              Send message <ArrowRight className="size-4" />
+            </button>
+          </form>
+
           <div className="overflow-hidden rounded-2xl border min-h-[320px] lg:min-h-[400px]">
             <iframe
               title="Capital Recruitment office location"

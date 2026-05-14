@@ -4,8 +4,6 @@ import { ArrowRight, CheckCircle2, Building2, Users, ShieldCheck } from "lucide-
 import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
 import { INDUSTRY_LABELS } from "@/data/industries";
-import { FORMSPREE_EMPLOYER_ACTION } from "@/lib/forms";
-import { getBrowserSupabaseConfig } from "@/lib/capital-env";
 import { submitEmployerEnquiryFn } from "@/capital/capital-fns";
 
 export const Route = createFileRoute("/employer-enquiry")({
@@ -45,14 +43,11 @@ const SERVICES = [
 ];
 
 function EmployerEnquiryPage() {
-  const action = FORMSPREE_EMPLOYER_ACTION;
-  const useFormspree = Boolean(action);
-  const useSupabase = Boolean(getBrowserSupabaseConfig());
   const [done, setDone] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
-  const onSubmitSupabase = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErr(null);
     setPending(true);
@@ -106,272 +101,113 @@ function EmployerEnquiryPage() {
       <Section className="!py-12">
         <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
           <Reveal>
-            {useSupabase ? (
-              <form className="card-soft grid gap-5" onSubmit={(e) => void onSubmitSupabase(e)}>
-                {done && (
-                  <p className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-950">
-                    Thanks — your enquiry has been received. A consultant will be in touch.
-                  </p>
-                )}
-                {err && (
-                  <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900">
-                    {err}
-                  </p>
-                )}
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field name="company_name" label="Company name" type="text" required />
-                  <Field name="contact_person" label="Contact person" type="text" required />
-                  <Field name="email" label="Email" type="email" required />
-                  <Field name="phone" label="Phone" type="tel" />
-                  <div>
-                    <label className="text-xs font-semibold text-muted-foreground">Industry</label>
-                    <select
-                      name="industry"
-                      className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
-                      required
-                      defaultValue=""
-                    >
-                      <option value="" disabled>
-                        Select…
-                      </option>
-                      {INDUSTRIES.map((i) => (
-                        <option key={i} value={i}>
-                          {i}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <Field name="site_location" label="Location / site" type="text" required />
-                </div>
-
+            <form className="card-soft grid gap-5" onSubmit={(e) => void onSubmit(e)}>
+              {done && (
+                <p className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-950">
+                  Thanks — your enquiry has been received. A consultant will be in touch.
+                </p>
+              )}
+              {err && (
+                <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900">
+                  {err}
+                </p>
+              )}
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field name="company_name" label="Company name" type="text" required />
+                <Field name="contact_person" label="Contact person" type="text" required />
+                <Field name="email" label="Email" type="email" required />
+                <Field name="phone" label="Phone" type="tel" />
                 <div>
-                  <label className="text-xs font-semibold text-muted-foreground mb-2 block">
-                    Services of interest
-                  </label>
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {SERVICES.map((s) => (
-                      <label
-                        key={s}
-                        className="flex cursor-pointer items-center gap-2 rounded-lg border bg-background px-3 py-2.5 text-sm hover:bg-muted"
-                      >
-                        <input type="checkbox" name="services" value={s} /> {s}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field name="workers_required" label="Workers required (approx.)" type="number" />
-                  <div>
-                    <label className="text-xs font-semibold text-muted-foreground">
-                      Start timing
-                    </label>
-                    <select
-                      name="start_timing"
-                      className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
-                      required
-                      defaultValue=""
-                    >
-                      <option value="" disabled>
-                        Select…
+                  <label className="text-xs font-semibold text-muted-foreground">Industry</label>
+                  <select
+                    name="industry"
+                    className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
+                    required
+                    defaultValue=""
+                  >
+                    <option value="" disabled>
+                      Select…
+                    </option>
+                    {INDUSTRIES.map((i) => (
+                      <option key={i} value={i}>
+                        {i}
                       </option>
-                      {["Immediately", "Within 1 week", "Within 1 month", "Planning ahead"].map(
-                        (o) => (
-                          <option key={o} value={o}>
-                            {o}
-                          </option>
-                        ),
-                      )}
-                    </select>
-                  </div>
+                    ))}
+                  </select>
                 </div>
+                <Field name="site_location" label="Location / site" type="text" required />
+              </div>
 
+              <div>
+                <label className="text-xs font-semibold text-muted-foreground mb-2 block">
+                  Services of interest
+                </label>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {SERVICES.map((s) => (
+                    <label
+                      key={s}
+                      className="flex cursor-pointer items-center gap-2 rounded-lg border bg-background px-3 py-2.5 text-sm hover:bg-muted"
+                    >
+                      <input type="checkbox" name="services" value={s} /> {s}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field name="workers_required" label="Workers required (approx.)" type="number" />
                 <div>
                   <label className="text-xs font-semibold text-muted-foreground">
-                    Tell us about your workforce needs
+                    Start timing
                   </label>
-                  <textarea
-                    name="details"
-                    required
-                    rows={4}
+                  <select
+                    name="start_timing"
                     className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
-                  />
+                    required
+                    defaultValue=""
+                  >
+                    <option value="" disabled>
+                      Select…
+                    </option>
+                    {["Immediately", "Within 1 week", "Within 1 month", "Planning ahead"].map(
+                      (o) => (
+                        <option key={o} value={o}>
+                          {o}
+                        </option>
+                      ),
+                    )}
+                  </select>
                 </div>
+              </div>
 
-                <label className="flex items-start gap-2 text-xs text-muted-foreground">
-                  <input type="checkbox" name="consent" required className="mt-0.5" />I agree to the{" "}
-                  <Link className="underline" to="/privacy">
-                    Privacy Policy
-                  </Link>{" "}
-                  and{" "}
-                  <Link className="underline" to="/terms">
-                    Terms &amp; Conditions
-                  </Link>
-                  .
+              <div>
+                <label className="text-xs font-semibold text-muted-foreground">
+                  Tell us about your workforce needs
                 </label>
-
-                <button type="submit" className="btn-primary justify-center" disabled={pending}>
-                  Submit enquiry <ArrowRight className="size-4" />
-                </button>
-              </form>
-            ) : useFormspree ? (
-              <form className="card-soft grid gap-5" action={action} method="POST">
-                <input
-                  type="hidden"
-                  name="_subject"
-                  value="Employer enquiry (detailed) — Capital Recruitment website"
+                <textarea
+                  name="details"
+                  required
+                  rows={4}
+                  className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
                 />
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field name="company_name" label="Company name" type="text" required />
-                  <Field name="contact_person" label="Contact person" type="text" required />
-                  <Field name="email" label="Email" type="email" required />
-                  <Field name="phone" label="Phone" type="tel" />
-                  <div>
-                    <label className="text-xs font-semibold text-muted-foreground">Industry</label>
-                    <select
-                      name="industry"
-                      className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
-                      required
-                      defaultValue=""
-                    >
-                      <option value="" disabled>
-                        Select…
-                      </option>
-                      {INDUSTRIES.map((i) => (
-                        <option key={i} value={i}>
-                          {i}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <Field name="site_location" label="Location / site" type="text" required />
-                </div>
+              </div>
 
-                <div>
-                  <label className="text-xs font-semibold text-muted-foreground mb-2 block">
-                    Services of interest
-                  </label>
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {SERVICES.map((s) => (
-                      <label
-                        key={s}
-                        className="flex cursor-pointer items-center gap-2 rounded-lg border bg-background px-3 py-2.5 text-sm hover:bg-muted"
-                      >
-                        <input type="checkbox" name="services" value={s} /> {s}
-                      </label>
-                    ))}
-                  </div>
-                </div>
+              <label className="flex items-start gap-2 text-xs text-muted-foreground">
+                <input type="checkbox" name="consent" required className="mt-0.5" />I agree to the{" "}
+                <Link className="underline" to="/privacy">
+                  Privacy Policy
+                </Link>{" "}
+                and{" "}
+                <Link className="underline" to="/terms">
+                  Terms &amp; Conditions
+                </Link>
+                .
+              </label>
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field name="workers_required" label="Workers required (approx.)" type="number" />
-                  <div>
-                    <label className="text-xs font-semibold text-muted-foreground">
-                      Start timing
-                    </label>
-                    <select
-                      name="start_timing"
-                      className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
-                      required
-                      defaultValue=""
-                    >
-                      <option value="" disabled>
-                        Select…
-                      </option>
-                      {["Immediately", "Within 1 week", "Within 1 month", "Planning ahead"].map(
-                        (o) => (
-                          <option key={o} value={o}>
-                            {o}
-                          </option>
-                        ),
-                      )}
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-semibold text-muted-foreground">
-                    Tell us about your workforce needs
-                  </label>
-                  <textarea
-                    name="details"
-                    required
-                    rows={4}
-                    className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
-                  />
-                </div>
-
-                <label className="flex items-start gap-2 text-xs text-muted-foreground">
-                  <input type="checkbox" name="consent" required className="mt-0.5" />I agree to the{" "}
-                  <Link className="underline" to="/privacy">
-                    Privacy Policy
-                  </Link>{" "}
-                  and{" "}
-                  <Link className="underline" to="/terms">
-                    Terms &amp; Conditions
-                  </Link>
-                  .
-                </label>
-
-                <button type="submit" className="btn-primary justify-center">
-                  Submit enquiry <ArrowRight className="size-4" />
-                </button>
-              </form>
-            ) : (
-              <form className="card-soft grid gap-5" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <FieldRO label="Company name" />
-                  <FieldRO label="Contact person" />
-                  <FieldRO label="Email" type="email" />
-                  <FieldRO label="Phone" type="tel" />
-                  <SelectRO label="Industry" options={[...INDUSTRIES]} />
-                  <FieldRO label="Location / site" />
-                </div>
-
-                <div>
-                  <label className="text-xs font-semibold text-muted-foreground mb-2 block">
-                    Services of interest
-                  </label>
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {SERVICES.map((s) => (
-                      <label
-                        key={s}
-                        className="flex cursor-pointer items-center gap-2 rounded-lg border bg-background px-3 py-2.5 text-sm hover:bg-muted"
-                      >
-                        <input type="checkbox" /> {s}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <FieldRO label="Workers required" type="number" />
-                  <SelectRO
-                    label="Start date"
-                    options={["Immediately", "Within 1 week", "Within 1 month", "Planning ahead"]}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-semibold text-muted-foreground">
-                    Tell us about your workforce needs
-                  </label>
-                  <textarea
-                    rows={4}
-                    className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
-                  />
-                </div>
-
-                <label className="flex items-start gap-2 text-xs text-muted-foreground">
-                  <input type="checkbox" className="mt-0.5" />I agree to the Privacy Policy and
-                  Terms &amp; Conditions.
-                </label>
-
-                <button type="submit" className="btn-primary justify-center opacity-60" disabled>
-                  Submit enquiry <ArrowRight className="size-4" />
-                </button>
-              </form>
-            )}
+              <button type="submit" className="btn-primary justify-center" disabled={pending}>
+                Submit enquiry <ArrowRight className="size-4" />
+              </button>
+            </form>
           </Reveal>
 
           <Reveal delay={120}>
@@ -447,32 +283,6 @@ function Field({
         required={required}
         className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--lime-soft)]"
       />
-    </div>
-  );
-}
-
-function FieldRO({ label, type = "text" }: { label: string; type?: string }) {
-  return (
-    <div>
-      <label className="text-xs font-semibold text-muted-foreground">{label}</label>
-      <input
-        type={type}
-        className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm"
-      />
-    </div>
-  );
-}
-
-function SelectRO({ label, options }: { label: string; options: string[] }) {
-  return (
-    <div>
-      <label className="text-xs font-semibold text-muted-foreground">{label}</label>
-      <select className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm">
-        <option value="">Select…</option>
-        {options.map((o) => (
-          <option key={o}>{o}</option>
-        ))}
-      </select>
     </div>
   );
 }

@@ -464,8 +464,19 @@ export const submitContactMessageFn = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => contactSchema.parse(input))
   .handler(async ({ data }) => {
     const env = readCapitalServerEnv();
-    if (!isSupabaseBackendConfigured(env)) {
-      return { ok: false as const, error: "Contact form is not available (database not configured)." };
+    const pubOk = isSupabasePublicConfigured(env);
+    const svcOk = isSupabaseBackendConfigured(env);
+    dbg("submitContactMessageFn", {
+      publicConfigured: pubOk,
+      backendConfigured: svcOk,
+      hasServiceRole: Boolean(env.supabaseServiceRoleKey),
+    });
+    if (!svcOk) {
+      return {
+        ok: false as const,
+        error:
+          "Website form is temporarily unavailable. Please email us directly at paul@capitalrecruitment.com.au",
+      };
     }
     const { error } = await serviceClient().from("contact_messages").insert({
       full_name: data.full_name,
@@ -475,9 +486,11 @@ export const submitContactMessageFn = createServerFn({ method: "POST" })
       message: data.message,
     });
     if (error) {
-      console.error(error);
+      logCapital("contact_messages.insert", error);
+      dbg("submitContactMessageFn", { result: "insert-error", code: error.code ?? null });
       return { ok: false as const, error: "Could not send your message. Please try again." };
     }
+    dbg("submitContactMessageFn", { result: "ok" });
     return { ok: true as const };
   });
 
@@ -498,10 +511,18 @@ export const submitEmployerEnquiryFn = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => employerSchema.parse(input))
   .handler(async ({ data }) => {
     const env = readCapitalServerEnv();
-    if (!isSupabaseBackendConfigured(env)) {
+    const pubOk = isSupabasePublicConfigured(env);
+    const svcOk = isSupabaseBackendConfigured(env);
+    dbg("submitEmployerEnquiryFn", {
+      publicConfigured: pubOk,
+      backendConfigured: svcOk,
+      hasServiceRole: Boolean(env.supabaseServiceRoleKey),
+    });
+    if (!svcOk) {
       return {
         ok: false as const,
-        error: "Employer enquiry is not available (database not configured).",
+        error:
+          "Website form is temporarily unavailable. Please email us directly at paul@capitalrecruitment.com.au",
       };
     }
     const { error } = await serviceClient().from("employer_enquiries").insert({
@@ -517,8 +538,10 @@ export const submitEmployerEnquiryFn = createServerFn({ method: "POST" })
       details: data.details,
     });
     if (error) {
-      console.error(error);
+      logCapital("employer_enquiries.insert", error);
+      dbg("submitEmployerEnquiryFn", { result: "insert-error", code: error.code ?? null });
       return { ok: false as const, error: "Could not submit your enquiry. Please try again." };
     }
+    dbg("submitEmployerEnquiryFn", { result: "ok" });
     return { ok: true as const };
   });
