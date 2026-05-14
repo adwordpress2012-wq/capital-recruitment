@@ -20,3 +20,8 @@ export const EMAIL_APPLICATIONS = EMAIL_PAUL;
 export const PHONE_DISPLAY = "Phone number coming soon" as const;
 
 export const MAP_EMBED_QUERY = encodeURIComponent("70 Moore Street, Liverpool NSW 2170, Australia");
+
+/** Canonical site origin for absolute Open Graph / Twitter image URLs. Override with VITE_PUBLIC_SITE_URL when using a custom domain. */
+export const SITE_PUBLIC_ORIGIN =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_PUBLIC_SITE_URL) ||
+  "https://capital-recruitment.vercel.app";

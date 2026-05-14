@@ -8,9 +8,7 @@ export function SiteFooter() {
     <footer className="mt-24 bg-[color:var(--navy)] text-white/80">
       <div className="container-x grid gap-10 py-16 md:grid-cols-2 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <div className="text-white">
-            <Logo variant="light" />
-          </div>
+          <Logo variant="light" />
           <p className="mt-5 max-w-md text-sm text-white/65">
             Capital Recruitment Agency provides labour hire and recruitment support for industrial
             and commercial clients — safety-led, responsive and based in Liverpool NSW.

@@ -64,7 +64,15 @@ export function SiteHeader() {
       </div>
       {open && (
         <div className="lg:hidden border-t bg-background">
-          <div className="container-x py-4 flex flex-col gap-1">
+          <div className="container-x flex flex-col gap-1 py-4">
+            <Link
+              to="/"
+              onClick={() => setOpen(false)}
+              className="px-3 py-2"
+              aria-label="Capital Recruitment home"
+            >
+              <Logo />
+            </Link>
             {NAV.map((n) => (
               <Link
                 key={n.to}

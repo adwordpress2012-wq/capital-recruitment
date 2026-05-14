@@ -12,6 +12,7 @@ import {
 import appCss from "../styles.css?url";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { SITE_PUBLIC_ORIGIN } from "@/lib/site";
 
 function NotFoundComponent() {
   return (
@@ -79,9 +80,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:description", content: "Premium workforce solutions across Australia." },
       { property: "og:type", content: "website" },
+      {
+        property: "og:image",
+        content: `${SITE_PUBLIC_ORIGIN}/logo/capital-recruitment-full.png`,
+      },
+      { property: "og:image:width", content: "581" },
+      { property: "og:image:height", content: "538" },
       { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:image",
+        content: `${SITE_PUBLIC_ORIGIN}/logo/capital-recruitment-full.png`,
+      },
     ],
     links: [
+      { rel: "icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "icon", type: "image/png", href: "/favicon-32x32.png", sizes: "32x32" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap",
