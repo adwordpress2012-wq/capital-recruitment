@@ -11,30 +11,30 @@ import {
 import { jobSeekersCareer } from "@/lib/images";
 import { Section } from "@/components/Section";
 
-export const Route = createFileRoute("/job-seekers")({
+export const Route = createFileRoute("/candidates")({
   head: () => ({
     meta: [
       {
-        title: "Job Seekers — Labour Hire & Industrial Roles | Capital Recruitment Liverpool NSW",
+        title: "Candidates — Labour Hire & Industrial Roles | Capital Recruitment Liverpool NSW",
       },
       {
         name: "description",
         content:
-          "Apply for labour hire and industrial roles across Greater Sydney. Candidate applications for warehousing recruitment, construction labour hire, security labour hire and more — Capital Recruitment Agency.",
+          "Explore opportunities across Greater Sydney with Capital Recruitment Agency — labour hire, project roles and permanent placements with clear site expectations.",
       },
       {
         name: "keywords",
         content:
-          "candidate applications, labour hire Liverpool NSW, industrial staffing, recruitment agency Liverpool NSW",
+          "candidates, labour hire Liverpool NSW, industrial staffing, recruitment agency Greater Sydney",
       },
-      { property: "og:title", content: "Find work with Capital Recruitment" },
+      { property: "og:title", content: "Candidates — Capital Recruitment" },
       {
         property: "og:description",
         content: "Practical support for your next role — apply online today.",
       },
     ],
   }),
-  component: JobSeekersPage,
+  component: CandidatesPage,
 });
 
 const BENEFITS = [
@@ -67,21 +67,20 @@ const PROCESS = [
   },
 ];
 
-function JobSeekersPage() {
+function CandidatesPage() {
   return (
     <>
       <section className="container-x pt-12 pb-6">
         <div className="grid items-center gap-10 lg:grid-cols-2">
           <div>
-            <div className="eyebrow mb-4">● For job seekers</div>
+            <div className="eyebrow mb-4">● For candidates</div>
             <h1 className="text-4xl font-bold leading-[1.05] md:text-6xl">
               Find work that fits your{" "}
               <span className="text-gradient-lime italic">skills and goals</span>.
             </h1>
             <p className="mt-6 text-lg text-muted-foreground">
-              Whether you want ongoing casual shifts, a project contract or a permanent move, we
-              help you present your experience clearly — licences, safety habits and reliability
-              matter.
+              Whether you want ongoing casual shifts, a project contract or a permanent move, we help
+              you present your experience clearly — licences, safety habits and reliability matter.
             </p>
             <ul className="mt-6 space-y-3">
               {BENEFITS.map((t) => (
@@ -103,7 +102,7 @@ function JobSeekersPage() {
             <div className="overflow-hidden rounded-[2rem] border shadow-[var(--shadow-elegant)]">
               <img
                 src={jobSeekersCareer}
-                alt="Job seeker exploring industrial career opportunities"
+                alt="Candidate exploring industrial career opportunities"
                 className="w-full object-cover"
               />
             </div>
@@ -131,8 +130,8 @@ function JobSeekersPage() {
       <section className="container-x">
         <div className="grid gap-10 rounded-[2rem] grad-cta p-8 text-white md:p-12 lg:grid-cols-2">
           <div>
-            <div className="eyebrow mb-3 text-[color:var(--lime)]">● Apply</div>
-            <h2 className="text-3xl font-bold md:text-4xl">Submit your application in minutes.</h2>
+            <div className="eyebrow mb-3 text-[color:var(--lime)]">● Get started</div>
+            <h2 className="text-3xl font-bold md:text-4xl">Submit your resume in minutes.</h2>
             <p className="mt-3 text-white/75">
               Upload your resume, confirm work rights and availability, and tell us the roles you
               want. Applications are reviewed by our team — you can also email{" "}

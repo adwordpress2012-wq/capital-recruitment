@@ -5,11 +5,12 @@ import { Logo } from "./Logo";
 
 const NAV = [
   { to: "/", label: "Home" },
-  { to: "/about", label: "About Us" },
   { to: "/employers", label: "Employers" },
-  { to: "/job-seekers", label: "Job Seekers" },
+  { to: "/candidates", label: "Candidates" },
   { to: "/jobs", label: "Jobs" },
-  { to: "/industries", label: "Industries" },
+  { to: "/submit-vacancy", label: "Submit Vacancy" },
+  { to: "/upload-resume", label: "Upload Resume" },
+  { to: "/insights", label: "Insights" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -30,23 +31,23 @@ export function SiteHeader() {
         scrolled ? "border-b border-border/70 shadow-[0_1px_0_rgba(15,23,42,0.04)]" : ""
       }`}
     >
-      <div className="container-x flex items-center justify-between gap-4 py-1.5 sm:gap-5 sm:py-2 lg:gap-8 lg:py-2">
+      <div className="container-x flex items-center justify-between gap-3 py-1.5 sm:gap-4 sm:py-2 lg:gap-6 lg:py-2">
         <Link
           to="/"
           className="group inline-flex shrink-0 items-center rounded-md outline-none transition duration-200 ease-out hover:opacity-[0.92] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[color:var(--lime-soft)]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           <Logo placement="navbar" />
         </Link>
-        <nav className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center">
-          <div className="flex items-center gap-0.5">
+        <nav className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center lg:min-w-0">
+          <div className="flex max-w-[56rem] flex-wrap items-center justify-center gap-x-0.5 gap-y-1">
             {NAV.map((n) => (
               <Link
                 key={n.to}
                 to={n.to}
-                className="px-3.5 py-2 text-sm font-medium text-foreground/80 transition-colors duration-150 ease-out hover:text-foreground rounded-full"
+                className="whitespace-nowrap rounded-full px-2 py-2 text-[12px] font-medium text-foreground/80 transition-colors duration-150 ease-out hover:text-foreground xl:px-2.5 xl:text-[13px]"
                 activeProps={{
                   className:
-                    "px-3.5 py-2 text-sm font-semibold text-foreground rounded-full bg-muted transition-colors duration-150 ease-out",
+                    "whitespace-nowrap rounded-full px-2 py-2 text-[12px] font-semibold text-foreground bg-muted transition-colors duration-150 ease-out xl:px-2.5 xl:text-[13px]",
                 }}
                 activeOptions={{ exact: n.to === "/" }}
               >
@@ -56,7 +57,7 @@ export function SiteHeader() {
           </div>
         </nav>
         <div className="hidden shrink-0 items-center lg:flex">
-          <Link to="/contact" className="btn-primary">
+          <Link to="/contact" className="btn-primary text-sm">
             Get in touch <ArrowRight className="size-4" />
           </Link>
         </div>
@@ -72,7 +73,7 @@ export function SiteHeader() {
       </div>
       {open && (
         <div className="border-t border-border/70 bg-white lg:hidden">
-          <div className="container-x flex flex-col gap-0.5 py-3">
+          <div className="container-x flex max-h-[min(70vh,calc(100dvh-4rem))] flex-col gap-0.5 overflow-y-auto py-3">
             <Link
               to="/"
               onClick={() => setOpen(false)}
@@ -86,7 +87,7 @@ export function SiteHeader() {
                 key={n.to}
                 to={n.to}
                 onClick={() => setOpen(false)}
-                className="px-3 py-2.5 text-sm font-medium transition-colors duration-150 ease-out rounded-lg hover:bg-muted"
+                className="rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150 ease-out hover:bg-muted"
               >
                 {n.label}
               </Link>

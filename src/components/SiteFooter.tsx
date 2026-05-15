@@ -36,11 +36,12 @@ export function SiteFooter() {
           <ul className="space-y-2 text-sm">
             {[
               ["/", "Home"],
-              ["/about", "About"],
               ["/employers", "Employers"],
-              ["/job-seekers", "Job seekers"],
+              ["/candidates", "Candidates"],
               ["/jobs", "Jobs"],
-              ["/industries", "Industries"],
+              ["/submit-vacancy", "Submit vacancy"],
+              ["/upload-resume", "Upload resume"],
+              ["/insights", "Insights"],
               ["/contact", "Contact"],
             ].map(([to, label]) => (
               <li key={to}>
@@ -50,6 +51,21 @@ export function SiteFooter() {
               </li>
             ))}
           </ul>
+          <div className="mt-6 space-y-2 border-t border-white/10 pt-4 text-sm text-white/65">
+            <div className="text-[11px] font-semibold uppercase tracking-wide text-white/45">Also</div>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/about" className="transition hover:text-white">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link to="/industries" className="transition hover:text-white">
+                  Industries
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="lg:col-span-3">
@@ -108,14 +124,11 @@ export function SiteFooter() {
               </li>
             ) : null}
             <li className="flex flex-col gap-2 pt-2">
-              <Link to="/register" search={{ role: "" }} className="font-medium text-white transition hover:underline">
-                Candidate application →
+              <Link to="/upload-resume" className="font-medium text-white transition hover:underline">
+                Upload resume →
               </Link>
-              <Link
-                to="/employer-enquiry"
-                className="font-medium text-white transition hover:underline"
-              >
-                Employer enquiry →
+              <Link to="/submit-vacancy" className="font-medium text-white transition hover:underline">
+                Submit a vacancy →
               </Link>
             </li>
           </ul>

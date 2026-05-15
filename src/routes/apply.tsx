@@ -214,12 +214,8 @@ function ApplyPage() {
               <p className="mt-3 text-sm text-muted-foreground">{job.summary}</p>
               <p className="mt-4 text-xs text-muted-foreground">
                 Need the full candidate registration form instead?{" "}
-                <Link
-                  to="/register"
-                  search={{ role: "" }}
-                  className="font-semibold underline-offset-2 hover:underline"
-                >
-                  General registration
+                <Link to="/upload-resume" className="font-semibold underline-offset-2 hover:underline">
+                  Upload resume
                 </Link>
                 .
               </p>

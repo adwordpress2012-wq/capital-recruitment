@@ -236,12 +236,8 @@ function ContactPage() {
             {EMAIL_PAUL}
           </a>
           . Candidate applications:{" "}
-          <Link
-            to="/register"
-            search={{ role: "" }}
-            className="font-semibold text-foreground underline-offset-2 hover:underline"
-          >
-            apply online
+          <Link to="/upload-resume" className="font-semibold text-foreground underline-offset-2 hover:underline">
+            upload resume
           </Link>
           .
         </p>

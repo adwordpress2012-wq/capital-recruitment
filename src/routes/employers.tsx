@@ -160,7 +160,7 @@ function EmployerForm() {
     <section className="container-x">
       <div className="grid gap-10 rounded-[2rem] grad-cta p-8 text-white md:p-12 lg:grid-cols-2">
         <div>
-          <div className="eyebrow mb-3 text-[color:var(--lime)]">● Employer enquiry</div>
+          <div className="eyebrow mb-3 text-[color:var(--lime)]">● Submit a vacancy</div>
           <h2 className="text-3xl font-bold md:text-4xl">
             Tell us about your workforce priorities.
           </h2>
@@ -171,11 +171,11 @@ function EmployerForm() {
         </div>
         <div className="flex flex-col justify-center gap-4 rounded-2xl bg-card p-6 text-foreground">
           <p className="text-sm text-muted-foreground">
-            Use the full employer enquiry form to capture site context, services and mobilisation
-            timing. It only takes a few minutes.
+            Use the vacancy form to capture site context, services and mobilisation timing. It only
+            takes a few minutes.
           </p>
-          <Link to="/employer-enquiry" className="btn-primary w-full justify-center">
-            Start employer enquiry <ArrowRight className="size-4" />
+          <Link to="/submit-vacancy" className="btn-primary w-full justify-center">
+            Submit a vacancy <ArrowRight className="size-4" />
           </Link>
         </div>
       </div>

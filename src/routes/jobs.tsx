@@ -76,8 +76,12 @@ function JobsPage() {
             Find your next <span className="text-gradient-lime italic">opportunity</span>.
           </h1>
           <p className="mt-5 text-lg text-muted-foreground">
-            Published roles across our key industries. New positions are added as clients confirm
-            requirements — check back regularly or register for alerts.
+            Published roles across our key industries. Listings are curated from live vacancies — new
+            positions are added as roles are confirmed. Check back regularly or{" "}
+            <Link to="/upload-resume" className="font-semibold text-foreground underline-offset-2 hover:underline">
+              upload your resume
+            </Link>{" "}
+            so we can match you when suitable work opens.
           </p>
         </div>
       </section>

@@ -203,8 +203,8 @@ function HomePage() {
               <Link to="/employers" className="btn-primary">
                 For employers <ArrowRight className="size-4" />
               </Link>
-              <Link to="/job-seekers" className="btn-outline">
-                For job seekers <ArrowRight className="size-4" />
+              <Link to="/candidates" className="btn-outline">
+                For candidates <ArrowRight className="size-4" />
               </Link>
             </div>
             <div className="mt-10 grid max-w-lg grid-cols-1 gap-6 sm:grid-cols-3">
@@ -268,9 +268,9 @@ function HomePage() {
             },
             {
               img: jobSeekersCareer,
-              label: "For job seekers",
+              label: "For candidates",
               desc: "Clear guidance, respectful screening and roles across warehousing, construction, manufacturing, transport, hospitality, civil, mining, administration and security.",
-              to: "/job-seekers",
+              to: "/candidates",
               cta: "View pathways & apply",
             },
           ].map((c) => (
@@ -430,8 +430,8 @@ function HomePage() {
               <Link to="/contact" className="btn-primary">
                 Contact Liverpool NSW <ArrowRight className="size-4" />
               </Link>
-              <Link to="/employer-enquiry" className="btn-ghost-light">
-                Employer enquiry
+              <Link to="/submit-vacancy" className="btn-ghost-light">
+                Submit a vacancy
               </Link>
             </div>
           </div>
