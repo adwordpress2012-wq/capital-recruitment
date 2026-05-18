@@ -36,12 +36,12 @@ export function SiteFooter() {
           <ul className="space-y-2 text-sm">
             {[
               ["/", "Home"],
-              ["/employers", "Employers"],
-              ["/candidates", "Candidates"],
-              ["/jobs", "Jobs"],
-              ["/submit-vacancy", "Submit vacancy"],
-              ["/upload-resume", "Upload resume"],
-              ["/insights", "Insights"],
+              ["/about", "About Us"],
+              ["/employers", "Employer"],
+              ["/job-seekers", "Job Seeker"],
+              ["/industries", "Services"],
+              ["/jobs", "Current Jobs"],
+              ["/insights", "Insight"],
               ["/contact", "Contact"],
             ].map(([to, label]) => (
               <li key={to}>
@@ -55,13 +55,8 @@ export function SiteFooter() {
             <div className="text-[11px] font-semibold uppercase tracking-wide text-white/45">Also</div>
             <ul className="space-y-2">
               <li>
-                <Link to="/about" className="transition hover:text-white">
-                  About
-                </Link>
-              </li>
-              <li>
                 <Link to="/industries" className="transition hover:text-white">
-                  Industries
+                  Services
                 </Link>
               </li>
             </ul>

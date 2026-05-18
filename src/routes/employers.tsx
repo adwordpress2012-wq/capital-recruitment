@@ -102,7 +102,7 @@ function EmployersPage() {
                 Request a call back <ArrowRight className="size-4" />
               </Link>
               <Link to="/industries" className="btn-outline">
-                Industries we support
+                Services we support
               </Link>
             </div>
           </div>

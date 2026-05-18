@@ -86,7 +86,7 @@ const WHY = [
   },
   {
     icon: Briefcase,
-    title: "Industry depth",
+    title: "Service depth",
     desc: "Strong experience across warehousing, construction, logistics, manufacturing, hospitality, civil, mining, administration and security.",
   },
 ];
@@ -324,7 +324,7 @@ function HomePage() {
       </Section>
 
       <Section
-        eyebrow="Industries we support"
+        eyebrow="Services we support"
         title={
           <>
             Workforce solutions across <br />
@@ -356,7 +356,7 @@ function HomePage() {
         </div>
         <div className="mt-8 flex justify-center">
           <Link to="/industries" className="btn-outline">
-            View industries in detail <ArrowRight className="size-4" />
+            View services in detail <ArrowRight className="size-4" />
           </Link>
         </div>
       </Section>

@@ -13,6 +13,7 @@ import { Route as WhsCommitmentRouteImport } from './routes/whs-commitment'
 import { Route as UploadResumeRouteImport } from './routes/upload-resume'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SubmitVacancyRouteImport } from './routes/submit-vacancy'
+import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as JobsRouteImport } from './routes/jobs'
@@ -51,6 +52,11 @@ const TermsRoute = TermsRouteImport.update({
 const SubmitVacancyRoute = SubmitVacancyRouteImport.update({
   id: '/submit-vacancy',
   path: '/submit-vacancy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/jobs': typeof JobsRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/services': typeof ServicesRoute
   '/submit-vacancy': typeof SubmitVacancyRoute
   '/terms': typeof TermsRoute
   '/upload-resume': typeof UploadResumeRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByTo {
   '/jobs': typeof JobsRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/services': typeof ServicesRoute
   '/submit-vacancy': typeof SubmitVacancyRoute
   '/terms': typeof TermsRoute
   '/upload-resume': typeof UploadResumeRoute
@@ -216,6 +224,7 @@ export interface FileRoutesById {
   '/jobs': typeof JobsRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
+  '/services': typeof ServicesRoute
   '/submit-vacancy': typeof SubmitVacancyRoute
   '/terms': typeof TermsRoute
   '/upload-resume': typeof UploadResumeRoute
@@ -243,6 +252,7 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/privacy'
     | '/register'
+    | '/services'
     | '/submit-vacancy'
     | '/terms'
     | '/upload-resume'
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/privacy'
     | '/register'
+    | '/services'
     | '/submit-vacancy'
     | '/terms'
     | '/upload-resume'
@@ -293,6 +304,7 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/privacy'
     | '/register'
+    | '/services'
     | '/submit-vacancy'
     | '/terms'
     | '/upload-resume'
@@ -319,6 +331,7 @@ export interface RootRouteChildren {
   JobsRoute: typeof JobsRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
+  ServicesRoute: typeof ServicesRoute
   SubmitVacancyRoute: typeof SubmitVacancyRoute
   TermsRoute: typeof TermsRoute
   UploadResumeRoute: typeof UploadResumeRoute
@@ -356,6 +369,13 @@ declare module '@tanstack/react-router' {
       path: '/submit-vacancy'
       fullPath: '/submit-vacancy'
       preLoaderRoute: typeof SubmitVacancyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -520,6 +540,7 @@ const rootRouteChildren: RootRouteChildren = {
   JobsRoute: JobsRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
+  ServicesRoute: ServicesRoute,
   SubmitVacancyRoute: SubmitVacancyRoute,
   TermsRoute: TermsRoute,
   UploadResumeRoute: UploadResumeRoute,

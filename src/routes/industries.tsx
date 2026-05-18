@@ -18,19 +18,19 @@ export const Route = createFileRoute("/industries")({
     meta: [
       {
         title:
-          "Industries — Warehousing, Construction & Security Labour Hire | Capital Recruitment",
+          "Services - Warehousing, Construction & Security Labour Hire | Capital Recruitment",
       },
       {
         name: "description",
         content:
-          "Industrial staffing across warehousing & logistics, construction, manufacturing, transport, hospitality, civil, mining, administration and security labour hire — Capital Recruitment Agency, Liverpool NSW.",
+          "Recruitment and labour hire services across warehousing & logistics, construction, manufacturing, transport, hospitality, civil, mining, administration and security labour hire - Capital Recruitment Agency, Liverpool NSW.",
       },
       {
         name: "keywords",
         content:
           "warehousing recruitment, construction labour hire, security labour hire, industrial staffing, labour hire Liverpool NSW, workforce solutions Australia",
       },
-      { property: "og:title", content: "Industries — Capital Recruitment" },
+      { property: "og:title", content: "Services - Capital Recruitment" },
       {
         property: "og:description",
         content: "Skilled workforce solutions across core Australian sectors.",
@@ -93,14 +93,14 @@ function IndustriesPage() {
     <>
       <section className="container-x pt-12 pb-2">
         <div className="max-w-3xl">
-          <div className="eyebrow mb-4">● Industries</div>
+          <div className="eyebrow mb-4">Services</div>
           <h1 className="text-4xl font-bold leading-[1.05] md:text-6xl">
             Workforce solutions across{" "}
-            <span className="text-gradient-lime italic">core industries</span>.
+            <span className="text-gradient-lime italic">core services</span>.
           </h1>
           <p className="mt-5 text-lg text-muted-foreground">
             Capital Recruitment Agency supplies labour hire and recruitment support where safety,
-            attendance and communication matter. If your sector is not listed, still reach out — we
+            attendance and communication matter. If your service need is not listed, still reach out - we
             regularly support adjacent industrial categories.
           </p>
         </div>
@@ -116,7 +116,11 @@ function IndustriesPage() {
               <div className="aspect-[4/3] overflow-hidden">
                 <img
                   src={i.img}
-                  alt={i.name}
+                  alt={
+                    i.name === "Security"
+                      ? "Uniformed security guard representing Capital Recruitment security staffing services"
+                      : i.name
+                  }
                   loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -140,9 +144,9 @@ function IndustriesPage() {
       <section className="container-x">
         <div className="flex flex-col gap-6 rounded-[2rem] grad-cta p-10 text-white md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-3xl font-bold md:text-4xl">Do not see your industry listed?</h2>
+            <h2 className="text-3xl font-bold md:text-4xl">Do not see your service listed?</h2>
             <p className="mt-2 text-white/75">
-              Share your operation and roster needs — we will advise honestly on fit, timelines and
+              Share your operation and roster needs - we will advise honestly on fit, timelines and
               compliance.
             </p>
           </div>

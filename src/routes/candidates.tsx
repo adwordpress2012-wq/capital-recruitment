@@ -157,13 +157,13 @@ function CandidatesPage() {
       <section className="container-x">
         <div className="card-soft flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <div>
-            <h3 className="text-xl font-bold">Want to understand our industries first?</h3>
+            <h3 className="text-xl font-bold">Want to understand our services first?</h3>
             <p className="text-sm text-muted-foreground">
               Explore the sectors we recruit for most often.
             </p>
           </div>
           <Link to="/industries" className="btn-outline">
-            View industries <ArrowRight className="size-4" />
+            View services <ArrowRight className="size-4" />
           </Link>
         </div>
       </section>

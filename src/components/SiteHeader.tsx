@@ -5,12 +5,12 @@ import { Logo } from "./Logo";
 
 const NAV = [
   { to: "/", label: "Home" },
-  { to: "/employers", label: "Employers" },
-  { to: "/candidates", label: "Candidates" },
-  { to: "/jobs", label: "Jobs" },
-  { to: "/submit-vacancy", label: "Submit Vacancy" },
-  { to: "/upload-resume", label: "Upload Resume" },
-  { to: "/insights", label: "Insights" },
+  { to: "/about", label: "About Us" },
+  { to: "/employers", label: "Employer" },
+  { to: "/job-seekers", label: "Job Seeker" },
+  { to: "/industries", label: "Services" },
+  { to: "/jobs", label: "Current Jobs" },
+  { to: "/insights", label: "Insight" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
