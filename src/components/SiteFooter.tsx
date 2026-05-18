@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, MapPin, Linkedin, Facebook, Instagram } from "lucide-react";
 import { Logo } from "./Logo";
+import { SITE_NAV } from "@/lib/site-nav";
 import { BUSINESS_ADDRESS, EMAIL_ACCOUNTS, EMAIL_HR, EMAIL_PAUL, SITE_PHONE } from "@/lib/site";
 
 export function SiteFooter() {
@@ -34,16 +35,7 @@ export function SiteFooter() {
         <div className="lg:col-span-2">
           <h4 className="mb-4 text-sm font-semibold text-white">Navigate</h4>
           <ul className="space-y-2 text-sm">
-            {[
-              ["/", "Home"],
-              ["/about", "About Us"],
-              ["/employers", "Employer"],
-              ["/job-seekers", "Job Seeker"],
-              ["/industries", "Services"],
-              ["/jobs", "Current Jobs"],
-              ["/insights", "Insight"],
-              ["/contact", "Contact"],
-            ].map(([to, label]) => (
+            {SITE_NAV.map(({ to, label }) => (
               <li key={to}>
                 <Link to={to} className="transition hover:text-white">
                   {label}
@@ -51,16 +43,6 @@ export function SiteFooter() {
               </li>
             ))}
           </ul>
-          <div className="mt-6 space-y-2 border-t border-white/10 pt-4 text-sm text-white/65">
-            <div className="text-[11px] font-semibold uppercase tracking-wide text-white/45">Also</div>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/industries" className="transition hover:text-white">
-                  Services
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
 
         <div className="lg:col-span-3">

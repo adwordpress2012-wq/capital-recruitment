@@ -2,17 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { Logo } from "./Logo";
-
-const NAV = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About Us" },
-  { to: "/employers", label: "Employer" },
-  { to: "/job-seekers", label: "Job Seeker" },
-  { to: "/industries", label: "Services" },
-  { to: "/jobs", label: "Current Jobs" },
-  { to: "/insights", label: "Insight" },
-  { to: "/contact", label: "Contact" },
-] as const;
+import { SITE_NAV } from "@/lib/site-nav";
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -40,7 +30,7 @@ export function SiteHeader() {
         </Link>
         <nav className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center lg:min-w-0">
           <div className="flex max-w-[56rem] flex-wrap items-center justify-center gap-x-0.5 gap-y-1">
-            {NAV.map((n) => (
+            {SITE_NAV.map((n) => (
               <Link
                 key={n.to}
                 to={n.to}
@@ -82,7 +72,7 @@ export function SiteHeader() {
             >
               <Logo placement="navbar" />
             </Link>
-            {NAV.map((n) => (
+            {SITE_NAV.map((n) => (
               <Link
                 key={n.to}
                 to={n.to}

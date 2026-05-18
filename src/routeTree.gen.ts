@@ -19,6 +19,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as JobSeekersRouteImport } from './routes/job-seekers'
 import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as InsightRouteImport } from './routes/insight'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as EqualOpportunityRouteImport } from './routes/equal-opportunity'
 import { Route as EmployersRouteImport } from './routes/employers'
@@ -82,6 +83,11 @@ const JobSeekersRoute = JobSeekersRouteImport.update({
 const InsightsRoute = InsightsRouteImport.update({
   id: '/insights',
   path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightRoute = InsightRouteImport.update({
+  id: '/insight',
+  path: '/insight',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndustriesRoute = IndustriesRouteImport.update({
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/employers': typeof EmployersRoute
   '/equal-opportunity': typeof EqualOpportunityRoute
   '/industries': typeof IndustriesRoute
+  '/insight': typeof InsightRoute
   '/insights': typeof InsightsRoute
   '/job-seekers': typeof JobSeekersRoute
   '/jobs': typeof JobsRouteWithChildren
@@ -192,6 +199,7 @@ export interface FileRoutesByTo {
   '/employers': typeof EmployersRoute
   '/equal-opportunity': typeof EqualOpportunityRoute
   '/industries': typeof IndustriesRoute
+  '/insight': typeof InsightRoute
   '/insights': typeof InsightsRoute
   '/job-seekers': typeof JobSeekersRoute
   '/jobs': typeof JobsRouteWithChildren
@@ -219,6 +227,7 @@ export interface FileRoutesById {
   '/employers': typeof EmployersRoute
   '/equal-opportunity': typeof EqualOpportunityRoute
   '/industries': typeof IndustriesRoute
+  '/insight': typeof InsightRoute
   '/insights': typeof InsightsRoute
   '/job-seekers': typeof JobSeekersRoute
   '/jobs': typeof JobsRouteWithChildren
@@ -247,6 +256,7 @@ export interface FileRouteTypes {
     | '/employers'
     | '/equal-opportunity'
     | '/industries'
+    | '/insight'
     | '/insights'
     | '/job-seekers'
     | '/jobs'
@@ -273,6 +283,7 @@ export interface FileRouteTypes {
     | '/employers'
     | '/equal-opportunity'
     | '/industries'
+    | '/insight'
     | '/insights'
     | '/job-seekers'
     | '/jobs'
@@ -299,6 +310,7 @@ export interface FileRouteTypes {
     | '/employers'
     | '/equal-opportunity'
     | '/industries'
+    | '/insight'
     | '/insights'
     | '/job-seekers'
     | '/jobs'
@@ -326,6 +338,7 @@ export interface RootRouteChildren {
   EmployersRoute: typeof EmployersRoute
   EqualOpportunityRoute: typeof EqualOpportunityRoute
   IndustriesRoute: typeof IndustriesRoute
+  InsightRoute: typeof InsightRoute
   InsightsRoute: typeof InsightsRoute
   JobSeekersRoute: typeof JobSeekersRoute
   JobsRoute: typeof JobsRouteWithChildren
@@ -411,6 +424,13 @@ declare module '@tanstack/react-router' {
       path: '/insights'
       fullPath: '/insights'
       preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insight': {
+      id: '/insight'
+      path: '/insight'
+      fullPath: '/insight'
+      preLoaderRoute: typeof InsightRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/industries': {
@@ -535,6 +555,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmployersRoute: EmployersRoute,
   EqualOpportunityRoute: EqualOpportunityRoute,
   IndustriesRoute: IndustriesRoute,
+  InsightRoute: InsightRoute,
   InsightsRoute: InsightsRoute,
   JobSeekersRoute: JobSeekersRoute,
   JobsRoute: JobsRouteWithChildren,
