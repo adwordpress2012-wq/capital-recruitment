@@ -150,8 +150,18 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-x flex flex-col items-center justify-center gap-4 py-6 text-xs text-white/50 md:flex-row">
-          <div>© {new Date().getFullYear()} Capital Recruitment Agency. All rights reserved.</div>
+        <div className="container-x flex flex-col items-center justify-center py-6 text-center text-[11px] leading-relaxed text-white/45">
+          <p>
+            © {new Date().getFullYear()} Capital Recruitment. Powered by{" "}
+            <a
+              href="https://directiveos.com.au"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/55 transition hover:text-white/75 hover:underline"
+            >
+              DirectiveOS
+            </a>
+          </p>
         </div>
       </div>
     </footer>
