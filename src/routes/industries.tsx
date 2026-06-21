@@ -118,7 +118,7 @@ function IndustriesPage() {
                   src={i.img}
                   alt={
                     i.name === "Security"
-                      ? "Uniformed security guard representing Capital Recruitment security staffing services"
+                      ? "Australian security guard in uniform representing Capital Recruitment security services"
                       : i.name
                   }
                   loading="lazy"
